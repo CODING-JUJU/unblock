@@ -5,211 +5,516 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080b14">
-<title>LAJUJU | Dashboard</title>
-<link id="tab-icon" rel="icon" href="https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64">
+<title>LAJUJU</title>
+
+<!-- Plain black LAJUJU tab icon -->
+<link id="tab-icon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
 
 <style>
 :root {
-  --bg:#080b14;
-  --panel:#111728;
-  --panel2:#171f33;
-  --text:#edf2ff;
-  --muted:#9aa8c4;
-  --accent:#00f5d4;
-  --purple:#9b7bff;
-  --border:rgba(160,180,220,.15);
+  --bg: #080b14;
+  --panel: rgba(16, 23, 40, .9);
+  --panel2: #171f33;
+  --text: #edf2ff;
+  --muted: #9aa8c4;
+  --accent: #00f5d4;
+  --purple: #9b7bff;
+  --border: rgba(160,180,220,.16);
 }
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--text);
+  background: var(--bg);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: -40%;
+  pointer-events: none;
   background:
-    radial-gradient(ellipse at 15% 0%,rgba(0,245,212,.1),transparent 38%),
-    radial-gradient(ellipse at 90% 12%,rgba(155,123,255,.12),transparent 35%),
-    var(--bg);
-  color:var(--text);
-  font-family:Inter,"Segoe UI",Arial,sans-serif;
+    radial-gradient(ellipse at 25% 30%, rgba(0,245,212,.17), transparent 34%),
+    radial-gradient(ellipse at 75% 25%, rgba(155,123,255,.19), transparent 34%),
+    radial-gradient(ellipse at 65% 80%, rgba(25,76,180,.16), transparent 38%),
+    radial-gradient(ellipse at 15% 85%, rgba(0,180,170,.1), transparent 32%);
+  background-size: 150% 150%;
+  animation: drifting-background 22s ease-in-out infinite alternate;
 }
-button,input{font:inherit}
-button,a{-webkit-tap-highlight-color:transparent}
-a{color:inherit;text-decoration:none}
-button:focus-visible,a:focus-visible,input:focus-visible{
-  outline:2px solid var(--accent);outline-offset:3px
+
+@keyframes drifting-background {
+  0% {
+    transform: translate(-4%, -2%) rotate(0deg) scale(1);
+    background-position: 0% 20%;
+  }
+  50% {
+    transform: translate(3%, 3%) rotate(4deg) scale(1.08);
+    background-position: 100% 70%;
+  }
+  100% {
+    transform: translate(-2%, 5%) rotate(-3deg) scale(1.04);
+    background-position: 20% 100%;
+  }
 }
-.topbar{
-  position:sticky;top:0;z-index:10;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:14px;padding:14px clamp(15px,4vw,46px);
-  background:rgba(8,11,20,.9);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(18px);
+
+button, input { font: inherit; }
+a { color: inherit; text-decoration: none; }
+
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
-.brand{
-  display:flex;align-items:center;gap:11px;
-  font-weight:900;font-size:21px;letter-spacing:3px;
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px clamp(14px, 4vw, 46px);
+  background: rgba(8,11,20,.85);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(20px);
 }
-.brand-mark{
-  width:38px;height:38px;display:grid;place-items:center;
-  border-radius:12px;background:var(--accent);color:#06110f;
-  box-shadow:0 0 24px #00f5d433;font-size:23px
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 3px;
 }
-.top-right{display:flex;align-items:center;gap:14px}
-.clock{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
-.disguise{position:relative}
-.disguise-button{
-  display:flex;align-items:center;gap:9px;
-  padding:9px 12px;background:var(--panel);
-  color:var(--text);border:1px solid var(--border);
-  border-radius:12px;cursor:pointer
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  color: #06110f;
+  background: var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 0 25px #00f5d433;
+  font-size: 23px;
 }
-.disguise-button:hover{border-color:var(--accent)}
-.disguise-button img{width:23px;height:23px;object-fit:contain}
-.chevron{color:var(--muted);font-size:12px}
-.disguise-menu{
-  position:absolute;right:0;top:calc(100% + 10px);
-  width:245px;padding:8px;display:none;
-  background:#111728;border:1px solid var(--border);
-  border-radius:15px;box-shadow:0 20px 55px #0009;
+
+.top-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
-.disguise-menu.open{display:block}
-.menu-heading{
-  padding:9px 10px;color:var(--muted);
-  font-size:10px;font-weight:800;letter-spacing:1.5px;
-  text-transform:uppercase
+
+.clock {
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
-.disguise-option{
-  display:flex;align-items:center;gap:12px;width:100%;
-  padding:11px 10px;color:var(--text);
-  background:transparent;border:0;border-radius:10px;
-  text-align:left;cursor:pointer
+
+.disguise { position: relative; }
+
+.disguise-button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 12px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
 }
-.disguise-option:hover,.disguise-option[aria-checked="true"]{
-  background:var(--panel2)
+
+.disguise-button:hover { border-color: var(--accent); }
+
+.disguise-button img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
-.disguise-option img{width:25px;height:25px;object-fit:contain}
-.option-copy{flex:1}
-.option-copy strong{display:block;font-size:13px}
-.option-copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}
-.check{color:var(--accent);font-size:15px}
-.container{width:min(1050px,calc(100% - 30px));margin:auto}
-.hero{text-align:center;padding:72px 0 48px}
-.pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:8px 12px;color:var(--accent);
-  border:1px solid #00f5d433;background:#00f5d40d;
-  border-radius:999px;font-size:11px;font-weight:800;
-  letter-spacing:1.4px;text-transform:uppercase
+
+.chevron { color: var(--muted); }
+
+.disguise-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 255px;
+  padding: 8px;
+  display: none;
+  background: #111728;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  box-shadow: 0 20px 55px #0009;
 }
-.live-dot{
-  width:7px;height:7px;border-radius:50%;
-  background:var(--accent);box-shadow:0 0 10px var(--accent)
+
+.disguise-menu.open { display: block; }
+
+.menu-heading {
+  padding: 9px 10px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
-h1{
-  margin:22px 0 13px;font-size:clamp(43px,8vw,76px);
-  letter-spacing:-3px;line-height:1.05
+
+.disguise-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 10px;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
 }
-.gradient{
-  background:linear-gradient(100deg,var(--accent),#9b91ff);
-  color:transparent;background-clip:text;-webkit-background-clip:text
+
+.disguise-option:hover,
+.disguise-option[aria-checked="true"] {
+  background: var(--panel2);
 }
-.subtitle{
-  max-width:540px;margin:0 auto;color:var(--muted);
-  font-size:15px;line-height:1.8
+
+.disguise-option img {
+  width: 27px;
+  height: 27px;
+  object-fit: contain;
 }
-.search-wrap{max-width:670px;margin:30px auto 0}
-.search{
-  display:flex;align-items:center;gap:10px;padding:7px;
-  background:#12192a;border:1px solid #00f5d444;
-  border-radius:16px;transition:.2s
+
+.option-copy { flex: 1; }
+.option-copy strong { display: block; font-size: 13px; }
+.option-copy small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
 }
-.search:focus-within{border-color:var(--accent);box-shadow:0 0 30px #00f5d414}
-.search-symbol{padding-left:12px;color:var(--muted);font-size:22px}
-.search input{
-  flex:1;min-width:0;padding:13px 0;color:var(--text);
-  background:transparent;border:0;outline:none
+
+.check { color: var(--accent); }
+
+.container {
+  width: min(1000px, calc(100% - 30px));
+  margin: auto;
 }
-.search input::placeholder{color:#75839e}
-.primary{
-  display:inline-flex;justify-content:center;align-items:center;gap:8px;
-  padding:13px 17px;color:#05110f;background:var(--accent);
-  border:0;border-radius:11px;font-weight:800;cursor:pointer;
-  transition:transform .2s,filter .2s
+
+.hero {
+  padding: 76px 0 48px;
+  text-align: center;
 }
-.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
-.section{padding:15px 0 30px}
-.game-card{
-  padding:clamp(17px,3vw,28px);
-  background:rgba(17,23,40,.9);
-  border:1px solid var(--border);border-radius:21px;
-  box-shadow:0 20px 70px #0002
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  color: var(--accent);
+  background: #00f5d40d;
+  border: 1px solid #00f5d433;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
 }
-.game-header{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:14px
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
 }
-.game-title{display:flex;align-items:center;gap:13px}
-.cookie-icon{
-  display:grid;place-items:center;width:51px;height:51px;
-  background:#231b30;border:1px solid #9b7bff44;
-  border-radius:15px;font-size:29px
+
+h1 {
+  margin: 23px 0 13px;
+  font-size: clamp(43px, 8vw, 76px);
+  letter-spacing: -3px;
+  line-height: 1.06;
 }
-h2{margin:0 0 7px;font-size:21px}
-.game-subtitle{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
-.version{
-  flex-shrink:0;padding:7px 10px;color:var(--accent);
-  background:#00f5d40c;border:1px solid #00f5d42b;
-  border-radius:8px;font-size:11px;font-weight:800
+
+.gradient {
+  color: transparent;
+  background: linear-gradient(100deg, var(--accent), #9b91ff);
+  background-clip: text;
+  -webkit-background-clip: text;
 }
-.game-actions{
-  display:flex;flex-wrap:wrap;gap:10px;margin:21px 0 15px
+
+.subtitle {
+  max-width: 530px;
+  margin: auto;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
 }
-.secondary{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:12px 15px;color:var(--text);background:var(--panel2);
-  border:1px solid var(--border);border-radius:11px;
-  cursor:pointer;font-size:13px
+
+.search-wrap {
+  max-width: 670px;
+  margin: 30px auto 0;
 }
-.secondary:hover{border-color:var(--accent)}
-.game-frame-wrap{
-  overflow:hidden;position:relative;
-  background:#090c14;border:1px solid var(--border);
-  border-radius:14px
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px;
+  background: rgba(18,25,42,.94);
+  border: 1px solid #00f5d444;
+  border-radius: 16px;
+  transition: border-color .2s, box-shadow .2s;
 }
-.game-frame{display:block;width:100%;height:600px;border:0;background:#090c14}
-.frame-note{
-  display:flex;align-items:flex-start;gap:10px;
-  margin-top:13px;padding:13px 14px;
-  color:var(--muted);background:#ffffff05;
-  border:1px solid var(--border);border-radius:12px;
-  font-size:12px;line-height:1.65
+
+.search:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 30px #00f5d414;
 }
-.note-icon{font-size:17px}
-.note-text strong{color:var(--text)}
-footer{
-  padding:25px 15px 35px;color:#75819b;
-  border-top:1px solid var(--border);text-align:center;
-  font-size:12px;line-height:1.9
+
+.search-symbol {
+  padding-left: 12px;
+  color: var(--muted);
+  font-size: 22px;
 }
-@media(max-width:600px){
-  .topbar{padding:11px 12px}
-  .brand{font-size:16px;letter-spacing:2px;gap:8px}
-  .brand-mark{width:33px;height:33px}
-  .clock{display:none}
-  .disguise-button{padding:8px}
-  .disguise-button img{width:21px;height:21px}
-  .disguise-menu{width:230px}
-  .hero{padding:53px 0 35px}
-  h1{letter-spacing:-2px}
-  .search{gap:6px}
-  .search input{font-size:14px}
-  .primary{padding:12px}
-  .game-header{gap:8px}
-  .cookie-icon{width:43px;height:43px;font-size:25px}
-  h2{font-size:18px}
-  .version{font-size:10px;padding:6px}
-  .game-frame{height:520px}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 0;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  outline: none;
 }
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+
+.search input::placeholder { color: #75839e; }
+
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 17px;
+  color: #05110f;
+  background: var(--accent);
+  border: 0;
+  border-radius: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .2s, filter .2s;
+}
+
+.primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.game-card {
+  margin: 10px 0 48px;
+  padding: clamp(17px, 3vw, 28px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 21px;
+  box-shadow: 0 20px 70px #0002;
+  backdrop-filter: blur(10px);
+}
+
+.game-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.cookie-icon {
+  width: 51px;
+  height: 51px;
+  display: grid;
+  place-items: center;
+  background: #231b30;
+  border: 1px solid #9b7bff44;
+  border-radius: 15px;
+  font-size: 29px;
+}
+
+h2 { margin: 0 0 7px; font-size: 21px; }
+
+.game-subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.version {
+  flex-shrink: 0;
+  padding: 7px 10px;
+  color: var(--accent);
+  background: #00f5d40c;
+  border: 1px solid #00f5d42b;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.game-launch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 17px;
+  margin-top: 22px;
+  padding: 35px 20px;
+  background:
+    radial-gradient(ellipse at 50% 0%, #9b7bff16, transparent 65%),
+    rgba(5,8,15,.65);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.big-cookie {
+  font-size: 68px;
+  filter: drop-shadow(0 0 22px #d79a4c38);
+  animation: cookie-float 4s ease-in-out infinite;
+}
+
+@keyframes cookie-float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+.game-launch h3 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.game-launch p {
+  max-width: 490px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.launch-button {
+  min-width: min(100%, 310px);
+  padding: 16px 20px;
+  font-size: 15px;
+}
+
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 15px;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.secondary:hover { border-color: var(--accent); }
+
+.embed-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 17px;
+  padding: 13px 15px;
+  background: #ffffff05;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.embed-toggle strong { font-size: 12px; }
+.embed-toggle p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.game-frame-wrap {
+  display: none;
+  overflow: hidden;
+  margin-top: 15px;
+  background: #090c14;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.game-frame-wrap.visible { display: block; }
+
+.game-frame {
+  display: block;
+  width: 100%;
+  height: 650px;
+  background: #090c14;
+  border: 0;
+}
+
+.note {
+  margin: 15px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+footer {
+  padding: 24px 15px 35px;
+  color: #75819b;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+@media (max-width: 600px) {
+  .topbar { padding: 11px 12px; }
+  .brand { font-size: 16px; letter-spacing: 2px; gap: 8px; }
+  .brand-mark { width: 33px; height: 33px; }
+  .clock { display: none; }
+  .disguise-button { padding: 8px; font-size: 12px; }
+  .disguise-button img { width: 21px; height: 21px; }
+  .disguise-menu { width: 235px; }
+  .hero { padding: 54px 0 35px; }
+  h1 { letter-spacing: -2px; }
+  .search { gap: 6px; }
+  .search input { font-size: 14px; }
+  .primary { padding: 12px; }
+  .game-header { gap: 8px; }
+  .cookie-icon { width: 43px; height: 43px; font-size: 25px; }
+  h2 { font-size: 18px; }
+  .version { padding: 6px; font-size: 10px; }
+  .game-launch { padding: 27px 14px; }
+  .game-frame { height: 520px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
 }
 </style>
 </head>
@@ -217,7 +522,8 @@ footer{
 <body>
 <header class="topbar">
   <a href="#" class="brand" aria-label="LAJUJU home">
-    <span class="brand-mark">L</span><span>LAJUJU</span>
+    <span class="brand-mark">L</span>
+    <span>LAJUJU</span>
   </a>
 
   <div class="top-right">
@@ -226,9 +532,8 @@ footer{
     <div class="disguise">
       <button id="disguise-button" class="disguise-button"
         type="button" aria-haspopup="true" aria-expanded="false">
-        <img id="selected-icon"
-          src="https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64"
-          alt="">
+        <img id="selected-icon" alt=""
+          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
         <span id="selected-label">LAJUJU tab</span>
         <span class="chevron">▾</span>
       </button>
@@ -238,43 +543,57 @@ footer{
 
         <button class="disguise-option" type="button" role="menuitemradio"
           aria-checked="true" data-choice="laj">
-          <img src="https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64" alt="">
-          <span class="option-copy"><strong>LAJUJU</strong><small>Default appearance</small></span>
+          <img alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
+          <span class="option-copy"><strong>LAJUJU</strong><small>Black square icon</small></span>
           <span class="check">✓</span>
         </button>
 
         <button class="disguise-option" type="button" role="menuitemradio"
           aria-checked="false" data-choice="docs">
-          <img src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=64" alt="">
-          <span class="option-copy"><strong>Google Docs</strong><small>Real product favicon</small></span>
+          <img alt="Google Docs" src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=64">
+          <span class="option-copy"><strong>Google Docs</strong><small>Google product icon</small></span>
+          <span class="check"></span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="slides">
+          <img alt="Google Slides" src="https://www.google.com/s2/favicons?domain=slides.google.com&sz=64">
+          <span class="option-copy"><strong>Google Slides</strong><small>Google product icon</small></span>
           <span class="check"></span>
         </button>
 
         <button class="disguise-option" type="button" role="menuitemradio"
           aria-checked="false" data-choice="classroom">
-          <img src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64" alt="">
-          <span class="option-copy"><strong>Google Classroom</strong><small>Real product favicon</small></span>
+          <img alt="Google Classroom" src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64">
+          <span class="option-copy"><strong>Google Classroom</strong><small>Google product icon</small></span>
           <span class="check"></span>
         </button>
 
         <button class="disguise-option" type="button" role="menuitemradio"
           aria-checked="false" data-choice="drive">
-          <img src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=64" alt="">
-          <span class="option-copy"><strong>Google Drive</strong><small>Real product favicon</small></span>
+          <img alt="Google Drive" src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=64">
+          <span class="option-copy"><strong>Google Drive</strong><small>Google product icon</small></span>
           <span class="check"></span>
         </button>
 
         <button class="disguise-option" type="button" role="menuitemradio"
           aria-checked="false" data-choice="calendar">
-          <img src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64" alt="">
-          <span class="option-copy"><strong>Google Calendar</strong><small>Real product favicon</small></span>
+          <img alt="Google Calendar" src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64">
+          <span class="option-copy"><strong>Google Calendar</strong><small>Google product icon</small></span>
+          <span class="check"></span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="gmail">
+          <img alt="Gmail" src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=64">
+          <span class="option-copy"><strong>Gmail</strong><small>Google product icon</small></span>
           <span class="check"></span>
         </button>
 
         <button class="disguise-option" type="button" role="menuitemradio"
           aria-checked="false" data-choice="blank">
-          <img src="https://www.google.com/s2/favicons?domain=example.com&sz=64" alt="">
-          <span class="option-copy"><strong>Blank tab</strong><small>Neutral title and icon</small></span>
+          <img alt="" src="https://www.google.com/s2/favicons?domain=example.com&sz=64">
+          <span class="option-copy"><strong>Blank tab</strong><small>Neutral title</small></span>
           <span class="check"></span>
         </button>
       </div>
@@ -300,97 +619,87 @@ footer{
     </div>
   </section>
 
-  <section class="section" id="cookie-clicker">
-    <div class="game-card">
-      <div class="game-header">
-        <div class="game-title">
-          <div class="cookie-icon" aria-hidden="true">🍪</div>
-          <div>
-            <h2>Cookie Clicker</h2>
-            <p class="game-subtitle">The original browser game by Orteil</p>
-          </div>
-        </div>
-        <span class="version">VERSION 2.058</span>
-      </div>
-
-      <div class="game-actions">
-        <a class="primary" href="https://orteil.dashnet.org/cookieclicker/"
-          target="_blank" rel="noopener noreferrer">
-          Play Original Cookie Clicker ↗
-        </a>
-        <button class="secondary" id="reload-game" type="button">
-          ↻ Reload embedded game
-        </button>
-      </div>
-
-      <div class="game-frame-wrap">
-        <iframe
-          id="cookie-frame"
-          class="game-frame"
-          src="https://orteil.dashnet.org/cookieclicker/"
-          title="Cookie Clicker official game version 2.058"
-          loading="eager"
-          allow="fullscreen"
-          referrerpolicy="strict-origin-when-cross-origin">
-        </iframe>
-      </div>
-
-      <div class="frame-note">
-        <span class="note-icon">ⓘ</span>
-        <div class="note-text">
-          <strong>If the game area is blank or blocked:</strong>
-          the official website may prevent embedded play. Click
-          <strong>Play Original Cookie Clicker</strong> above to launch the
-          actual game directly. This uses Orteil's official site, so its
-          features and save system work there. A blocked iframe cannot be
-          repaired just by changing the frame's HTML.
+  <section class="game-card" id="cookie-clicker">
+    <div class="game-header">
+      <div class="game-title">
+        <div class="cookie-icon" aria-hidden="true">🍪</div>
+        <div>
+          <h2>Cookie Clicker</h2>
+          <p class="game-subtitle">The original browser game by Orteil</p>
         </div>
       </div>
+      <span class="version">VERSION 2.058</span>
     </div>
+
+    <div class="game-launch">
+      <div class="big-cookie" aria-hidden="true">🍪</div>
+      <h3>Ready to bake?</h3>
+      <p>
+        Launch the official Cookie Clicker game. This opens the real game
+        directly, so its buildings, upgrades, achievements, and save system
+        are not dependent on LAJUJU's embedded frame.
+      </p>
+      <a class="primary launch-button"
+        href="https://orteil.dashnet.org/cookieclicker/"
+        target="_blank" rel="noopener noreferrer">
+        Play Original Cookie Clicker ↗
+      </a>
+      <p>Official game hosted by Orteil · Opens in a new tab</p>
+    </div>
+
+    <div class="embed-toggle">
+      <div>
+        <strong>Try playing inside LAJUJU</strong>
+        <p>If the official site permits embedding in your browser, this may work.</p>
+      </div>
+      <button class="secondary" id="toggle-embed" type="button">
+        Show embedded game
+      </button>
+    </div>
+
+    <div class="game-frame-wrap" id="frame-wrap">
+      <iframe
+        id="cookie-frame"
+        class="game-frame"
+        title="Official Cookie Clicker"
+        src="about:blank"
+        loading="lazy"
+        allow="fullscreen">
+      </iframe>
+    </div>
+
+    <p class="note">
+      If the embedded area shows a security error or stays blank, that is
+      controlled by the official website and cannot be fixed by changing
+      LAJUJU's HTML. Use the launch button above to play the original game.
+    </p>
   </section>
 </main>
 
 <footer>
   LAJUJU · Your space on the web<br>
-  Cookie Clicker is created by Orteil. It is hosted externally.
+  Cookie Clicker is created by Orteil and hosted on its official website.
 </footer>
 
 <script>
-const clock = document.getElementById("clock");
+const BLACK_ICON =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E";
 
-function updateClock() {
-  clock.textContent = new Intl.DateTimeFormat(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  }).format(new Date());
-}
-updateClock();
-setInterval(updateClock, 1000);
-
-// Search: submit a query to Google in a new tab.
-document.getElementById("search-form").addEventListener("submit", event => {
-  event.preventDefault();
-  const query = document.getElementById("search-input").value.trim();
-  if (!query) return;
-  window.open(
-    "https://www.google.com/search?q=" + encodeURIComponent(query),
-    "_blank",
-    "noopener,noreferrer"
-  );
-});
-
-// Tab disguise menu: actual Google favicon service icons.
 const presets = {
   laj: {
     label: "LAJUJU tab",
-    title: "LAJUJU | Dashboard",
-    icon: "https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64"
+    title: "LAJUJU",
+    icon: BLACK_ICON
   },
   docs: {
     label: "Google Docs",
     title: "Google Docs",
     icon: "https://www.google.com/s2/favicons?domain=docs.google.com&sz=64"
+  },
+  slides: {
+    label: "Google Slides",
+    title: "Google Slides",
+    icon: "https://www.google.com/s2/favicons?domain=slides.google.com&sz=64"
   },
   classroom: {
     label: "Classroom",
@@ -407,6 +716,11 @@ const presets = {
     title: "Google Calendar",
     icon: "https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64"
   },
+  gmail: {
+    label: "Gmail",
+    title: "Gmail",
+    icon: "https://www.google.com/s2/favicons?domain=mail.google.com&sz=64"
+  },
   blank: {
     label: "Blank tab",
     title: "New Tab",
@@ -414,13 +728,42 @@ const presets = {
   }
 };
 
+// Live local clock
+const clock = document.getElementById("clock");
+
+function updateClock() {
+  clock.textContent = new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  }).format(new Date());
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+// Search
+document.getElementById("search-form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const query = document.getElementById("search-input").value.trim();
+  if (!query) return;
+
+  window.open(
+    "https://www.google.com/search?q=" + encodeURIComponent(query),
+    "_blank",
+    "noopener,noreferrer"
+  );
+});
+
+// Tab title and favicon menu
 const disguiseButton = document.getElementById("disguise-button");
 const disguiseMenu = document.getElementById("disguise-menu");
 const selectedIcon = document.getElementById("selected-icon");
 const selectedLabel = document.getElementById("selected-label");
 const tabIcon = document.getElementById("tab-icon");
 
-function closeDisguiseMenu() {
+function closeMenu() {
   disguiseMenu.classList.remove("open");
   disguiseButton.setAttribute("aria-expanded", "false");
 }
@@ -433,8 +776,7 @@ disguiseButton.addEventListener("click", () => {
 
 document.querySelectorAll(".disguise-option").forEach(button => {
   button.addEventListener("click", () => {
-    const choice = button.dataset.choice;
-    const preset = presets[choice];
+    const preset = presets[button.dataset.choice];
     if (!preset) return;
 
     document.title = preset.title;
@@ -448,25 +790,35 @@ document.querySelectorAll(".disguise-option").forEach(button => {
       option.querySelector(".check").textContent = selected ? "✓" : "";
     });
 
-    closeDisguiseMenu();
+    closeMenu();
   });
 });
 
 document.addEventListener("click", event => {
-  if (!event.target.closest(".disguise")) closeDisguiseMenu();
+  if (!event.target.closest(".disguise")) closeMenu();
 });
 
 document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeDisguiseMenu();
+  if (event.key === "Escape") closeMenu();
 });
 
-// Retry the official embedded game.
-document.getElementById("reload-game").addEventListener("click", () => {
-  const frame = document.getElementById("cookie-frame");
-  frame.src = "about:blank";
-  setTimeout(() => {
-    frame.src = "https://orteil.dashnet.org/cookieclicker/";
-  }, 100);
+// Optional embedded game. The official site may block this.
+const toggleEmbed = document.getElementById("toggle-embed");
+const frameWrap = document.getElementById("frame-wrap");
+const cookieFrame = document.getElementById("cookie-frame");
+let frameLoaded = false;
+
+toggleEmbed.addEventListener("click", () => {
+  const showing = frameWrap.classList.toggle("visible");
+
+  toggleEmbed.textContent = showing
+    ? "Hide embedded game"
+    : "Show embedded game";
+
+  if (showing && !frameLoaded) {
+    cookieFrame.src = "https://orteil.dashnet.org/cookieclicker/";
+    frameLoaded = true;
+  }
 });
 </script>
 </body>
