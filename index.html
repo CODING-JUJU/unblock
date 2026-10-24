@@ -10,113 +10,100 @@
 
 <style>
 :root {
-  --cyan: #43f7ff;
-  --purple: #a76bff;
-  --pink: #ff4fd8;
+  --cyan: #55f5ff;
+  --purple: #a88bff;
+  --pink: #ff72df;
   --bg: #050610;
-  --panel: rgba(15, 18, 39, .78);
-  --border: rgba(130, 145, 255, .27);
-  --muted: #a5adcf;
+  --panel: rgba(14, 17, 35, .72);
+  --border: rgba(139, 151, 255, .2);
+  --muted: #a5acc8;
+  --ease: cubic-bezier(.22, 1, .36, 1);
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-height: 100vh;
-  color: #f7f8ff;
-  background: var(--bg);
-  font-family: Inter, "Segoe UI", system-ui, sans-serif;
   overflow-x: hidden;
+  background: var(--bg);
+  color: #f8f9ff;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
 }
-button, input { font: inherit; }
 a { color: inherit; text-decoration: none; }
+button, input { font: inherit; }
 
-/* Moving neon background */
+/* Smooth animated atmosphere */
 #ambient {
   position: fixed;
+  inset: -35%;
   z-index: -3;
-  inset: -45%;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 25% 20%, #00d9ff35, transparent 30%),
-    radial-gradient(ellipse at 75% 30%, #a000ff38, transparent 32%),
-    radial-gradient(ellipse at 60% 75%, #0055ff30, transparent 30%),
-    radial-gradient(ellipse at 20% 80%, #ff00ae20, transparent 27%);
-  filter: blur(35px);
-  animation: drift 16s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 24% 26%, #00d9ff27, transparent 34%),
+    radial-gradient(ellipse at 75% 24%, #a000ff29, transparent 35%),
+    radial-gradient(ellipse at 65% 78%, #0055ff22, transparent 33%),
+    radial-gradient(ellipse at 25% 75%, #ff00ae15, transparent 30%);
+  filter: blur(65px);
+  animation: atmosphere 32s ease-in-out infinite alternate;
+  will-change: transform;
 }
-@keyframes drift {
-  0% { transform: translate(-4%, -3%) rotate(0deg) scale(1); }
-  50% { transform: translate(4%, 3%) rotate(9deg) scale(1.12); }
-  100% { transform: translate(-1%, 6%) rotate(-8deg) scale(1.04); }
+@keyframes atmosphere {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1) rotate(0deg); }
+  50% { transform: translate3d(2%, 1%, 0) scale(1.04) rotate(3deg); }
+  100% { transform: translate3d(-1%, 2%, 0) scale(1.02) rotate(-2deg); }
 }
 #stars {
   position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;
-  opacity: .23;
+  opacity: .16;
   background-image:
-    radial-gradient(circle, white 1px, transparent 1.5px),
-    radial-gradient(circle, var(--cyan) 1px, transparent 1.5px);
-  background-size: 83px 83px, 137px 137px;
-  background-position: 0 0, 40px 55px;
-  animation: starMove 35s linear infinite;
+    radial-gradient(circle, #fff 1px, transparent 1.4px),
+    radial-gradient(circle, #6eeeff 1px, transparent 1.4px);
+  background-size: 101px 101px, 157px 157px;
+  background-position: 0 0, 50px 75px;
+  animation: starsDrift 75s linear infinite;
+  will-change: background-position;
 }
-@keyframes starMove {
-  to { background-position: 83px 166px, 177px 0; }
+@keyframes starsDrift {
+  to { background-position: 101px 202px, 207px 0; }
 }
 body::after {
   content: "";
   position: fixed;
-  z-index: -1;
   inset: 0;
+  z-index: -1;
   pointer-events: none;
-  background: linear-gradient(transparent 96%, #64dfff0b 100%);
-  background-size: 100% 5px;
+  opacity: .12;
+  background: linear-gradient(transparent 50%, #6e8aff08 50%);
+  background-size: 100% 6px;
 }
 
-/* Mouse click ripples */
+/* Click ripples */
 .ripple {
   position: fixed;
   z-index: 9999;
-  width: 12px;
-  height: 12px;
-  border: 2px solid var(--cyan);
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--cyan);
   border-radius: 50%;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(.2);
-  animation: rippleExpand .72s ease-out forwards;
-  box-shadow: 0 0 12px var(--cyan), inset 0 0 8px #a76bff;
-}
-.ripple::before, .ripple::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border: 1px solid #a76bffb0;
-  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(.1);
+  animation: ripple .9s var(--ease) forwards;
+  box-shadow: 0 0 12px #55f5ff75;
+  will-change: transform, opacity;
 }
 .ripple::after {
-  inset: -19px;
-  border-color: #ff4fd880;
-}
-@keyframes rippleExpand {
-  0% { opacity: .95; transform: translate(-50%,-50%) scale(.2); }
-  100% { opacity: 0; transform: translate(-50%,-50%) scale(5.5); }
-}
-.click-flash {
-  position: fixed;
-  z-index: 9998;
-  width: 5px;
-  height: 5px;
-  pointer-events: none;
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border: 1px solid #b58aff75;
   border-radius: 50%;
-  background: white;
-  box-shadow: 0 0 14px 5px var(--purple);
-  animation: flashOut .5s ease-out forwards;
 }
-@keyframes flashOut {
-  to { opacity: 0; transform: scale(8); }
+@keyframes ripple {
+  0% { opacity: .85; transform: translate(-50%, -50%) scale(.1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(5); }
 }
 
 /* Header */
@@ -127,79 +114,84 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  padding: 15px clamp(16px, 5vw, 65px);
-  background: #060711d9;
-  border-bottom: 1px solid #8d78ff2b;
-  backdrop-filter: blur(20px);
+  gap: 15px;
+  padding: 16px clamp(16px, 5vw, 65px);
+  background: rgba(5, 6, 16, .76);
+  border-bottom: 1px solid #9b8cff1a;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 .brand {
   font-size: 25px;
   font-weight: 1000;
   letter-spacing: 4px;
-  background: linear-gradient(90deg, white, var(--cyan), var(--purple), var(--pink));
-  background-size: 250% auto;
+  background: linear-gradient(100deg, white, var(--cyan), var(--purple), var(--pink));
+  background-size: 220% auto;
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
-  animation: logoGlow 5s linear infinite;
+  animation: logoFlow 12s linear infinite;
 }
-@keyframes logoGlow { to { background-position: 250% center; } }
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 13px;
+@keyframes logoFlow {
+  to { background-position: 220% center; }
 }
+.header-right { display: flex; align-items: center; gap: 14px; }
 .clock {
-  font-size: 12px;
   color: var(--cyan);
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 .menu-wrap { position: relative; }
 .menu-button, .ghost-button {
   padding: 10px 13px;
+  color: white;
+  background: #14172a;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: #171a32;
-  color: white;
   cursor: pointer;
-  transition: .2s;
+  transition: background .35s var(--ease), border-color .35s var(--ease);
 }
 .menu-button:hover, .ghost-button:hover {
-  border-color: var(--cyan);
-  box-shadow: 0 0 20px #43f7ff26;
+  background: #1c2039;
+  border-color: #55f5ff70;
 }
 .dropdown {
   display: none;
   position: absolute;
-  right: 0;
   top: calc(100% + 10px);
+  right: 0;
   width: 225px;
   padding: 10px;
-  background: #101329;
+  background: #101329f5;
   border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: 0 20px 55px #000b;
+  border-radius: 15px;
+  box-shadow: 0 20px 55px #0009;
+  backdrop-filter: blur(20px);
 }
-.dropdown.open { display: block; animation: popIn .2s ease-out; }
-.dropdown p { padding: 0 9px; color: var(--muted); font-size: 12px; }
+.dropdown.open { display: block; animation: dropdownIn .25s var(--ease); }
+.dropdown p { padding: 0 9px; color: var(--muted); font-size: 11px; }
 .dropdown button {
   display: block;
   width: 100%;
   padding: 11px;
-  text-align: left;
   color: white;
-  background: transparent;
+  text-align: left;
   border: 0;
   border-radius: 9px;
+  background: transparent;
   cursor: pointer;
+  transition: background .25s ease;
 }
-.dropdown button:hover { background: #7b6cff25; }
+.dropdown button:hover { background: #8e7aff20; }
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-/* Hero */
+/* Main hero: no small tagline beneath LAJUJU */
 .hero {
   width: min(1000px, 90%);
-  margin: 85px auto 50px;
+  margin: 100px auto 65px;
   text-align: center;
 }
 .pill {
@@ -207,115 +199,125 @@ header {
   align-items: center;
   gap: 9px;
   padding: 9px 15px;
-  border: 1px solid #43f7ff50;
-  border-radius: 100px;
-  background: #43f7ff0c;
   color: var(--cyan);
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 2px;
-  text-transform: uppercase;
-  box-shadow: 0 0 30px #43f7ff0c;
+  border: 1px solid #55f5ff38;
+  border-radius: 100px;
+  background: #55f5ff08;
 }
 .pill-dot {
-  width: 7px; height: 7px;
-  background: var(--cyan);
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--cyan);
-  animation: pulse 1.6s infinite;
+  background: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
+  animation: breathe 2.8s ease-in-out infinite;
 }
-@keyframes pulse { 50% { opacity: .3; } }
+@keyframes breathe {
+  0%, 100% { opacity: .95; }
+  50% { opacity: .4; }
+}
 h1 {
-  margin: 25px 0 15px;
-  font-size: clamp(60px, 12vw, 120px);
+  margin: 30px 0 38px;
+  font-size: clamp(65px, 13vw, 130px);
   line-height: .95;
   font-weight: 1000;
   letter-spacing: -.075em;
-  background: linear-gradient(110deg, white 10%, var(--cyan) 40%, var(--purple) 68%, var(--pink));
+  background: linear-gradient(110deg, white 10%, var(--cyan) 40%, var(--purple) 72%, var(--pink));
   background-size: 200% auto;
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
-  filter: drop-shadow(0 0 32px #6b63ff29);
-  animation: titleFlow 7s linear infinite;
+  filter: drop-shadow(0 0 28px #7770ff19);
+  animation: titleFlow 14s linear infinite;
 }
-@keyframes titleFlow { to { background-position: 200% center; } }
-.subtitle {
-  margin: 23px auto 30px;
-  color: var(--muted);
-  font-size: clamp(14px, 2vw, 17px);
-  line-height: 1.7;
+@keyframes titleFlow {
+  to { background-position: 200% center; }
 }
 .search {
   display: flex;
   width: min(650px, 100%);
-  margin: auto;
+  margin: 0 auto;
   padding: 7px;
   gap: 8px;
-  border: 1px solid #8e83ff55;
+  background: #0a0c1bdb;
+  border: 1px solid #8e83ff42;
   border-radius: 17px;
-  background: #0a0d1bdc;
-  box-shadow: 0 0 35px #6857ff17, inset 0 0 20px #43f7ff05;
-  transition: .25s;
+  box-shadow: 0 0 30px #6857ff0c;
+  transition: border-color .45s var(--ease), box-shadow .45s var(--ease);
 }
 .search:focus-within {
-  border-color: var(--cyan);
-  box-shadow: 0 0 35px #43f7ff22;
+  border-color: #55f5ff9c;
+  box-shadow: 0 0 30px #43f7ff16;
 }
 .search input {
   flex: 1;
   width: 0;
   padding: 13px;
+  color: white;
   outline: none;
   border: 0;
   background: transparent;
-  color: white;
 }
-.search input::placeholder { color: #7e87aa; }
+.search input::placeholder { color: #858eaf; }
 .primary-button {
   padding: 13px 19px;
   color: #070913;
   font-weight: 850;
   border: 0;
   border-radius: 11px;
-  background: linear-gradient(110deg, var(--cyan), #b8a3ff);
+  background: linear-gradient(110deg, var(--cyan), #c0b1ff);
   cursor: pointer;
-  transition: .2s;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease);
 }
 .primary-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 25px #43f7ff55;
+  box-shadow: 0 5px 20px #43f7ff25;
 }
 .quick-links {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 .quick-links a {
-  color: #c6c9e5;
-  font-size: 12px;
   padding: 9px 12px;
+  color: #c5c9e2;
+  font-size: 12px;
+  border: 1px solid #8889ff1a;
   border-radius: 9px;
-  border: 1px solid #8889ff22;
-  background: #ffffff06;
-  transition: .2s;
+  background: #ffffff04;
+  transition: color .3s ease, border-color .3s ease, background .3s ease;
 }
-.quick-links a:hover { color: var(--cyan); border-color: #43f7ff66; }
+.quick-links a:hover {
+  color: var(--cyan);
+  border-color: #43f7ff60;
+  background: #43f7ff08;
+}
 
-/* Content and cards */
+/* App grid */
 main { width: min(1120px, 90%); margin: auto; }
-.section { margin: 62px 0; }
+.section { margin: 65px 0; }
 .section-head {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
-.section-head h2 { margin: 0; font-size: clamp(22px, 4vw, 30px); letter-spacing: -.8px; }
-.section-head p { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
-.section-tag { color: var(--cyan); font-size: 11px; letter-spacing: 1.5px; }
+.section-head h2 {
+  margin: 8px 0 0;
+  font-size: clamp(23px, 4vw, 30px);
+  letter-spacing: -.8px;
+}
+.section-head p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.section-tag { color: var(--cyan); font-size: 10px; letter-spacing: 1.5px; }
 .app-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -332,74 +334,84 @@ main { width: min(1120px, 90%); margin: auto; }
   border: 1px solid var(--border);
   border-radius: 17px;
   background: var(--panel);
-  backdrop-filter: blur(13px);
-  transition: transform .23s, border-color .23s, box-shadow .23s;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  transition:
+    transform .45s var(--ease),
+    border-color .45s var(--ease),
+    background .45s var(--ease),
+    box-shadow .45s var(--ease);
+  will-change: transform;
 }
-.app-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -120%;
-  width: 80%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  transition: left .5s;
-}
-.app-card:hover::before { left: 130%; }
 .app-card:hover {
-  transform: translateY(-5px) scale(1.015);
-  border-color: #43f7ff8a;
-  box-shadow: 0 12px 35px #32dfff12, 0 0 20px #8b6cff0b;
+  transform: translateY(-5px);
+  border-color: #55f5ff68;
+  background: rgba(19, 24, 48, .88);
+  box-shadow: 0 12px 32px #32dfff0c, 0 0 20px #8b6cff09;
 }
-.app-icon {
-  width: 43px;
-  height: 43px;
-  flex: 0 0 43px;
-  object-fit: contain;
-  border-radius: 10px;
+.app-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 45px;
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
   background: #ffffff08;
+  transition: transform .45s var(--ease);
 }
-.app-name { font-weight: 800; font-size: 13px; overflow-wrap: anywhere; }
-.app-desc { margin-top: 5px; font-size: 11px; color: var(--muted); }
+.app-card:hover .app-icon-wrap { transform: scale(1.06); }
+.app-icon {
+  display: block;
+  width: 39px;
+  height: 39px;
+  object-fit: contain;
+}
+.app-name { font-size: 13px; font-weight: 800; overflow-wrap: anywhere; }
+.app-desc { margin-top: 5px; color: var(--muted); font-size: 11px; }
 
-/* Game panel */
+/* Cookie Clicker */
 .game-panel {
   overflow: hidden;
-  border: 1px solid #a76bff65;
+  border: 1px solid #a76bff4d;
   border-radius: 23px;
-  background: linear-gradient(135deg, #11132beF, #0a0b18f2);
-  box-shadow: 0 0 55px #8b49ff12, inset 0 0 40px #6a50ff08;
+  background: linear-gradient(135deg, #11132bdc, #0a0b18eF);
+  box-shadow: 0 0 45px #8b49ff0c;
+  transition: border-color .4s ease, box-shadow .4s ease;
+}
+.game-panel:hover {
+  border-color: #a76bff80;
+  box-shadow: 0 0 45px #8b49ff13;
 }
 .game-inner {
   padding: clamp(25px, 6vw, 55px) 20px;
   text-align: center;
-  background:
-    radial-gradient(ellipse at 50% 0%, #a76bff20, transparent 65%);
+  background: radial-gradient(ellipse at 50% 0%, #a76bff16, transparent 65%);
 }
 .cookie {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
-  height: 100px;
-  border: 1px solid #ffcb743d;
-  border-radius: 30px;
-  background: #ffcb740c;
-  font-size: 58px;
-  box-shadow: 0 0 40px #ffbc5016;
-  animation: cookieFloat 3s ease-in-out infinite;
+  width: 95px;
+  height: 95px;
+  border: 1px solid #ffcb7433;
+  border-radius: 28px;
+  background: #ffcb7408;
+  font-size: 55px;
+  animation: cookieFloat 5s ease-in-out infinite;
+  will-change: transform;
 }
 @keyframes cookieFloat {
-  0%, 100% { transform: translateY(0) rotate(-4deg); }
-  50% { transform: translateY(-9px) rotate(4deg); }
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-6px) rotate(2deg); }
 }
-.game-inner h3 { font-size: 29px; margin: 22px 0 10px; }
+.game-inner h3 { margin: 22px 0 10px; font-size: 29px; }
 .game-inner p {
   max-width: 520px;
   margin: 0 auto 24px;
   color: var(--muted);
-  line-height: 1.7;
   font-size: 14px;
+  line-height: 1.7;
 }
 .game-actions {
   display: flex;
@@ -411,25 +423,25 @@ main { width: min(1120px, 90%); margin: auto; }
   display: inline-block;
   padding: 14px 20px;
   border-radius: 12px;
-  font-weight: 850;
   font-size: 13px;
-  transition: .2s;
+  font-weight: 850;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease);
 }
 .game-actions a:hover { transform: translateY(-3px); }
 .game-primary {
   color: #080914;
   background: linear-gradient(110deg, var(--cyan), #b4a1ff);
-  box-shadow: 0 0 25px #43f7ff1a;
 }
+.game-primary:hover { box-shadow: 0 6px 25px #43f7ff20; }
 .game-secondary {
   color: white;
-  border: 1px solid #a76bff70;
-  background: #a76bff12;
+  border: 1px solid #a76bff65;
+  background: #a76bff0c;
 }
 .game-note {
   padding: 15px 20px;
-  color: #969dbc;
-  border-top: 1px solid #a76bff25;
+  color: #9299b8;
+  border-top: 1px solid #a76bff1e;
   font-size: 11px;
   line-height: 1.7;
   text-align: center;
@@ -437,23 +449,16 @@ main { width: min(1120px, 90%); margin: auto; }
 footer {
   padding: 32px 5%;
   margin-top: 70px;
-  border-top: 1px solid #8d78ff25;
-  text-align: center;
+  border-top: 1px solid #8d78ff1c;
   color: #858baa;
   font-size: 12px;
+  text-align: center;
 }
-footer span {
-  color: var(--cyan);
-  letter-spacing: 2px;
-  font-weight: 900;
-}
-@keyframes popIn {
-  from { opacity: 0; transform: translateY(-5px) scale(.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
+footer span { color: var(--cyan); font-weight: 900; letter-spacing: 2px; }
+
 @media (max-width: 850px) {
   .app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hero { margin-top: 65px; }
+  .hero { margin-top: 75px; }
 }
 @media (max-width: 500px) {
   header { padding: 13px 5%; }
@@ -461,10 +466,11 @@ footer span {
   .clock { display: none; }
   .app-grid { gap: 10px; }
   .app-card { padding: 12px 9px; gap: 9px; }
-  .app-icon { width: 34px; height: 34px; flex-basis: 34px; }
+  .app-icon-wrap { width: 37px; height: 37px; flex-basis: 37px; }
+  .app-icon { width: 32px; height: 32px; }
   .app-name { font-size: 12px; }
   .app-desc { font-size: 10px; }
-  .hero { margin-top: 55px; }
+  .hero { margin-top: 65px; }
   .search button { padding: 11px 13px; }
   .section { margin: 48px 0; }
 }
@@ -473,6 +479,7 @@ footer span {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
   }
 }
 </style>
@@ -490,11 +497,11 @@ footer span {
       <button class="menu-button" id="menuButton" aria-expanded="false">TAB OPTIONS ▾</button>
       <div class="dropdown" id="tabMenu">
         <p>CHANGE TAB APPEARANCE</p>
-        <button data-title="Google Classroom" data-domain="classroom.google.com">Google Classroom</button>
-        <button data-title="Google Docs" data-domain="docs.google.com">Google Docs</button>
-        <button data-title="Google Drive" data-domain="drive.google.com">Google Drive</button>
-        <button data-title="Google Calendar" data-domain="calendar.google.com">Google Calendar</button>
-        <button data-title="Gmail" data-domain="mail.google.com">Gmail</button>
+        <button data-title="Google Classroom" data-icon="https://www.gstatic.com/images/branding/product/2x/classroom_48dp.png">Google Classroom</button>
+        <button data-title="Google Docs" data-icon="https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png">Google Docs</button>
+        <button data-title="Google Drive" data-icon="https://www.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png">Google Drive</button>
+        <button data-title="Google Calendar" data-icon="https://www.gstatic.com/images/branding/product/2x/calendar_2020q4_48dp.png">Google Calendar</button>
+        <button data-title="Gmail" data-icon="https://www.gstatic.com/images/branding/product/2x/gmail_2020q4_48dp.png">Gmail</button>
         <button id="resetTab">Reset to LAJUJU</button>
         <p>Changes the title and icon only.</p>
       </div>
@@ -505,7 +512,6 @@ footer span {
 <section class="hero">
   <div class="pill"><span class="pill-dot"></span> YOUR DIGITAL SPACE</div>
   <h1>LAJUJU</h1>
-  <p class="subtitle">A different dimension of the internet.<br>Fast access. Neon energy. Your space.</p>
 
   <form class="search" id="searchForm">
     <input id="searchInput" type="text" placeholder="Search anything..." aria-label="Search the web">
@@ -525,57 +531,57 @@ footer span {
       <div>
         <div class="section-tag">01 / APPLICATIONS</div>
         <h2>Google Apps</h2>
-        <p>Official services with icons loaded from Google's favicon service.</p>
+        <p>Quick access to your apps.</p>
       </div>
     </div>
 
     <div class="app-grid">
       <a class="app-card" href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Classroom icon" src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Classroom" src="https://www.gstatic.com/images/branding/product/2x/classroom_48dp.png"></span>
         <div><div class="app-name">Classroom</div><div class="app-desc">Classes & assignments</div></div>
       </a>
       <a class="app-card" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Docs icon" src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Docs" src="https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png"></span>
         <div><div class="app-name">Google Docs</div><div class="app-desc">Documents</div></div>
       </a>
       <a class="app-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Drive icon" src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Drive" src="https://www.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png"></span>
         <div><div class="app-name">Google Drive</div><div class="app-desc">Cloud storage</div></div>
       </a>
       <a class="app-card" href="https://slides.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Slides icon" src="https://www.google.com/s2/favicons?domain=slides.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Slides" src="https://www.gstatic.com/images/branding/product/2x/slides_2020q4_48dp.png"></span>
         <div><div class="app-name">Google Slides</div><div class="app-desc">Presentations</div></div>
       </a>
       <a class="app-card" href="https://sheets.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Sheets icon" src="https://www.google.com/s2/favicons?domain=sheets.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Sheets" src="https://www.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png"></span>
         <div><div class="app-name">Google Sheets</div><div class="app-desc">Spreadsheets</div></div>
       </a>
       <a class="app-card" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Gmail icon" src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Gmail" src="https://www.gstatic.com/images/branding/product/2x/gmail_2020q4_48dp.png"></span>
         <div><div class="app-name">Gmail</div><div class="app-desc">Email</div></div>
       </a>
       <a class="app-card" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Calendar icon" src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Calendar" src="https://www.gstatic.com/images/branding/product/2x/calendar_2020q4_48dp.png"></span>
         <div><div class="app-name">Calendar</div><div class="app-desc">Events & schedules</div></div>
       </a>
       <a class="app-card" href="https://meet.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Meet icon" src="https://www.google.com/s2/favicons?domain=meet.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Meet" src="https://www.gstatic.com/images/branding/product/2x/meet_2020q4_48dp.png"></span>
         <div><div class="app-name">Google Meet</div><div class="app-desc">Video meetings</div></div>
       </a>
       <a class="app-card" href="https://forms.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Forms icon" src="https://www.google.com/s2/favicons?domain=forms.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Forms" src="https://www.gstatic.com/images/branding/product/2x/forms_2020q4_48dp.png"></span>
         <div><div class="app-name">Forms</div><div class="app-desc">Forms & quizzes</div></div>
       </a>
       <a class="app-card" href="https://sites.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google Sites icon" src="https://www.google.com/s2/favicons?domain=sites.google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Sites" src="https://www.gstatic.com/images/branding/product/2x/sites_2020q4_48dp.png"></span>
         <div><div class="app-name">Google Sites</div><div class="app-desc">Build websites</div></div>
       </a>
       <a class="app-card" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="YouTube icon" src="https://www.google.com/s2/favicons?domain=youtube.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="YouTube" src="https://www.gstatic.com/images/branding/product/2x/youtube_48dp.png"></span>
         <div><div class="app-name">YouTube</div><div class="app-desc">Videos</div></div>
       </a>
       <a class="app-card" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">
-        <img class="app-icon" alt="Google icon" src="https://www.google.com/s2/favicons?domain=google.com&sz=128">
+        <span class="app-icon-wrap"><img class="app-icon" alt="Google Search" src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png"></span>
         <div><div class="app-name">Google</div><div class="app-desc">Search the web</div></div>
       </a>
     </div>
@@ -601,20 +607,17 @@ footer span {
         </div>
       </div>
       <div class="game-note">
-        The game opens in a new tab because the hosting site may block embedding.
+        Cookie Clicker opens in a new tab because the host may block embedding.
         Cookie Clicker was created by Orteil. LAJUJU is a separate fan-made homepage.
       </div>
     </div>
   </section>
 </main>
 
-<footer>
-  <span>LAJUJU</span><br><br>
-  NEON ENERGY · YOUR DIGITAL SPACE
-</footer>
+<footer><span>LAJUJU</span></footer>
 
 <script>
-// Live clock
+// Smooth live clock
 function updateClock() {
   document.getElementById("clock").textContent =
     new Date().toLocaleTimeString([], {
@@ -624,7 +627,7 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-// Ripple effect at mouse clicks and taps
+// Gentle ripple on click or tap
 document.addEventListener("pointerdown", function(event) {
   if (event.button !== undefined && event.button !== 0) return;
 
@@ -633,17 +636,10 @@ document.addEventListener("pointerdown", function(event) {
   ripple.style.left = event.clientX + "px";
   ripple.style.top = event.clientY + "px";
   document.body.appendChild(ripple);
-  ripple.addEventListener("animationend", () => ripple.remove());
-
-  const flash = document.createElement("span");
-  flash.className = "click-flash";
-  flash.style.left = event.clientX + "px";
-  flash.style.top = event.clientY + "px";
-  document.body.appendChild(flash);
-  flash.addEventListener("animationend", () => flash.remove());
+  ripple.addEventListener("animationend", () => ripple.remove(), { once: true });
 });
 
-// Search using Google
+// Search the web
 document.getElementById("searchForm").addEventListener("submit", function(event) {
   event.preventDefault();
   const query = document.getElementById("searchInput").value.trim();
@@ -655,7 +651,7 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
   );
 });
 
-// Tab title and favicon menu
+// Tab title and actual product icon
 const menuButton = document.getElementById("menuButton");
 const tabMenu = document.getElementById("tabMenu");
 const blackIcon =
@@ -679,10 +675,7 @@ menuButton.addEventListener("click", function() {
 tabMenu.querySelectorAll("button[data-title]").forEach(function(button) {
   button.addEventListener("click", function() {
     document.title = button.dataset.title;
-    changeFavicon(
-      "https://www.google.com/s2/favicons?domain=" +
-      encodeURIComponent(button.dataset.domain) + "&sz=64"
-    );
+    changeFavicon(button.dataset.icon);
     tabMenu.classList.remove("open");
     menuButton.setAttribute("aria-expanded", "false");
   });
