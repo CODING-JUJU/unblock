@@ -2,766 +2,472 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080b14">
-  <title>LAJUJU | Dashboard</title>
-
-  <link id="tab-icon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23080b14'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='57' font-weight='bold' fill='%2300f5d4'%3EL%3C/text%3E%3C/svg%3E">
-
-  <style>
-    :root {
-      --bg: #080b14;
-      --panel: rgba(17, 23, 40, .88);
-      --panel-light: #171e32;
-      --text: #edf2ff;
-      --muted: #9aa8c4;
-      --accent: #00f5d4;
-      --purple: #9b7bff;
-      --border: rgba(152, 176, 220, .15);
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at 15% 0%, rgba(0,245,212,.09), transparent 35%),
-        radial-gradient(ellipse at 85% 12%, rgba(155,123,255,.13), transparent 33%),
-        var(--bg);
-      font-family: Inter, "Segoe UI", Arial, sans-serif;
-    }
-
-    button, input, select { font: inherit; }
-    button, a, select { -webkit-tap-highlight-color: transparent; }
-
-    a { color: inherit; text-decoration: none; }
-
-    button:focus-visible, a:focus-visible,
-    input:focus-visible, select:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 15px clamp(16px, 4vw, 48px);
-      background: rgba(8, 11, 20, .86);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(18px);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 21px;
-      font-weight: 900;
-      letter-spacing: 3px;
-    }
-
-    .brand-icon {
-      display: grid;
-      place-items: center;
-      width: 38px;
-      height: 38px;
-      color: #06110f;
-      background: var(--accent);
-      border-radius: 12px;
-      box-shadow: 0 0 24px rgba(0,245,212,.24);
-    }
-
-    .brand-icon span { font-size: 22px; }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .clock {
-      color: var(--muted);
-      font-size: 13px;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-
-    .tab-select, .small-button {
-      max-width: 100%;
-      color: var(--text);
-      background: var(--panel-light);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-    }
-
-    .tab-select { cursor: pointer; }
-    .tab-select option { background: #111728; }
-
-    .container {
-      width: min(1120px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .hero {
-      padding: 70px 0 38px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      color: var(--accent);
-      background: rgba(0,245,212,.07);
-      border: 1px solid rgba(0,245,212,.19);
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 1.3px;
-      text-transform: uppercase;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      background: var(--accent);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent);
-    }
-
-    h1 {
-      margin: 22px 0 12px;
-      font-size: clamp(42px, 8vw, 76px);
-      line-height: 1.05;
-      letter-spacing: -3px;
-    }
-
-    .gradient-text {
-      color: var(--accent);
-      background: linear-gradient(100deg, #00f5d4, #8c8cff 75%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .subtitle {
-      max-width: 550px;
-      margin: 0 auto;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-
-    .search-wrap {
-      width: min(680px, 100%);
-      margin: 30px auto 0;
-    }
-
-    .search {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px;
-      background: rgba(19, 25, 43, .92);
-      border: 1px solid rgba(0,245,212,.25);
-      border-radius: 16px;
-      box-shadow: 0 0 40px rgba(0,245,212,.05);
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    .search:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 0 30px rgba(0,245,212,.12);
-    }
-
-    .search-icon {
-      padding-left: 12px;
-      color: var(--muted);
-      font-size: 20px;
-    }
-
-    .search input {
-      flex: 1;
-      min-width: 0;
-      padding: 14px 2px;
-      color: var(--text);
-      background: transparent;
-      border: 0;
-      outline: none;
-    }
-
-    .search input::placeholder { color: #71809e; }
-
-    .primary-button {
-      padding: 13px 19px;
-      color: #06110f;
-      background: var(--accent);
-      border: 0;
-      border-radius: 11px;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform .2s, filter .2s;
-    }
-
-    .primary-button:hover {
-      filter: brightness(1.08);
-      transform: translateY(-1px);
-    }
-
-    .section { padding: 25px 0; }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 17px;
-    }
-
-    .section-heading h2 {
-      margin: 0;
-      font-size: 19px;
-      letter-spacing: -.3px;
-    }
-
-    .section-heading p {
-      margin: 5px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .section-tag {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .app-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .app-card {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      min-width: 0;
-      padding: 19px 15px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      transition: transform .2s, border-color .2s, background .2s;
-    }
-
-    .app-card:hover {
-      transform: translateY(-4px);
-      background: #141c2f;
-      border-color: rgba(0,245,212,.42);
-    }
-
-    .app-icon {
-      display: grid;
-      place-items: center;
-      flex: 0 0 45px;
-      height: 45px;
-      background: var(--panel-light);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      font-size: 23px;
-    }
-
-    .app-info { min-width: 0; }
-
-    .app-info strong {
-      display: block;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    .app-info span {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .app-arrow {
-      margin-left: auto;
-      color: #647391;
-      font-size: 17px;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 16px;
-      margin: 12px 0 50px;
-    }
-
-    .feature-card {
-      min-width: 0;
-      padding: 24px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 19px;
-    }
-
-    .feature-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .feature-top h2 {
-      margin: 0 0 8px;
-      font-size: 19px;
-    }
-
-    .feature-top p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .feature-emoji { font-size: 28px; }
-
-    .game-frame {
-      width: 100%;
-      height: 530px;
-      margin-top: 19px;
-      background: #0b0e18;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    .game-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .secondary-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 11px 14px;
-      color: var(--text);
-      background: var(--panel-light);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .secondary-button:hover { border-color: var(--accent); }
-
-    .note {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
-    .quick-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .quick-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px;
-      background: rgba(255,255,255,.025);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      transition: border-color .2s;
-    }
-
-    .quick-item:hover { border-color: rgba(155,123,255,.6); }
-
-    .quick-item .app-icon {
-      flex-basis: 40px;
-      height: 40px;
-      font-size: 20px;
-    }
-
-    .quick-item strong { font-size: 13px; }
-    .quick-item p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .quick-item .app-arrow { margin-left: auto; }
-
-    .status-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 22px;
-      padding: 13px;
-      color: var(--muted);
-      background: rgba(0,245,212,.035);
-      border: 1px solid rgba(0,245,212,.1);
-      border-radius: 12px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    footer {
-      padding: 24px 16px 35px;
-      color: #72809b;
-      border-top: 1px solid var(--border);
-      text-align: center;
-      font-size: 12px;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 850px) {
-      .app-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .feature-grid { grid-template-columns: 1fr; }
-      .hero { padding-top: 52px; }
-    }
-
-    @media (max-width: 520px) {
-      .topbar { padding: 12px; gap: 8px; }
-      .brand { font-size: 17px; letter-spacing: 2px; gap: 8px; }
-      .brand-icon { width: 33px; height: 33px; }
-      .clock { display: none; }
-      .tab-select { max-width: 155px; padding: 9px 7px; font-size: 12px; }
-      .container { width: calc(100% - 24px); }
-      .hero { padding: 48px 0 25px; }
-      h1 { letter-spacing: -2px; }
-      .search { gap: 6px; }
-      .search input { font-size: 14px; }
-      .primary-button { padding: 12px; }
-      .app-grid { gap: 9px; }
-      .app-card { gap: 9px; padding: 13px 10px; }
-      .app-icon { flex-basis: 37px; height: 37px; font-size: 19px; }
-      .app-info strong { font-size: 12px; }
-      .app-info span { font-size: 10px; }
-      .app-arrow { display: none; }
-      .feature-card { padding: 17px; }
-      .game-frame { height: 460px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b14">
+<title>LAJUJU | Dashboard</title>
+<link id="tab-icon" rel="icon" href="https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64">
+
+<style>
+:root {
+  --bg:#080b14;
+  --panel:#111728;
+  --panel2:#171f33;
+  --text:#edf2ff;
+  --muted:#9aa8c4;
+  --accent:#00f5d4;
+  --purple:#9b7bff;
+  --border:rgba(160,180,220,.15);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 15% 0%,rgba(0,245,212,.1),transparent 38%),
+    radial-gradient(ellipse at 90% 12%,rgba(155,123,255,.12),transparent 35%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
+button,input{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible,input:focus-visible{
+  outline:2px solid var(--accent);outline-offset:3px
+}
+.topbar{
+  position:sticky;top:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;padding:14px clamp(15px,4vw,46px);
+  background:rgba(8,11,20,.9);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(18px);
+}
+.brand{
+  display:flex;align-items:center;gap:11px;
+  font-weight:900;font-size:21px;letter-spacing:3px;
+}
+.brand-mark{
+  width:38px;height:38px;display:grid;place-items:center;
+  border-radius:12px;background:var(--accent);color:#06110f;
+  box-shadow:0 0 24px #00f5d433;font-size:23px
+}
+.top-right{display:flex;align-items:center;gap:14px}
+.clock{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.disguise{position:relative}
+.disguise-button{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 12px;background:var(--panel);
+  color:var(--text);border:1px solid var(--border);
+  border-radius:12px;cursor:pointer
+}
+.disguise-button:hover{border-color:var(--accent)}
+.disguise-button img{width:23px;height:23px;object-fit:contain}
+.chevron{color:var(--muted);font-size:12px}
+.disguise-menu{
+  position:absolute;right:0;top:calc(100% + 10px);
+  width:245px;padding:8px;display:none;
+  background:#111728;border:1px solid var(--border);
+  border-radius:15px;box-shadow:0 20px 55px #0009;
+}
+.disguise-menu.open{display:block}
+.menu-heading{
+  padding:9px 10px;color:var(--muted);
+  font-size:10px;font-weight:800;letter-spacing:1.5px;
+  text-transform:uppercase
+}
+.disguise-option{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:11px 10px;color:var(--text);
+  background:transparent;border:0;border-radius:10px;
+  text-align:left;cursor:pointer
+}
+.disguise-option:hover,.disguise-option[aria-checked="true"]{
+  background:var(--panel2)
+}
+.disguise-option img{width:25px;height:25px;object-fit:contain}
+.option-copy{flex:1}
+.option-copy strong{display:block;font-size:13px}
+.option-copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}
+.check{color:var(--accent);font-size:15px}
+.container{width:min(1050px,calc(100% - 30px));margin:auto}
+.hero{text-align:center;padding:72px 0 48px}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 12px;color:var(--accent);
+  border:1px solid #00f5d433;background:#00f5d40d;
+  border-radius:999px;font-size:11px;font-weight:800;
+  letter-spacing:1.4px;text-transform:uppercase
+}
+.live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 10px var(--accent)
+}
+h1{
+  margin:22px 0 13px;font-size:clamp(43px,8vw,76px);
+  letter-spacing:-3px;line-height:1.05
+}
+.gradient{
+  background:linear-gradient(100deg,var(--accent),#9b91ff);
+  color:transparent;background-clip:text;-webkit-background-clip:text
+}
+.subtitle{
+  max-width:540px;margin:0 auto;color:var(--muted);
+  font-size:15px;line-height:1.8
+}
+.search-wrap{max-width:670px;margin:30px auto 0}
+.search{
+  display:flex;align-items:center;gap:10px;padding:7px;
+  background:#12192a;border:1px solid #00f5d444;
+  border-radius:16px;transition:.2s
+}
+.search:focus-within{border-color:var(--accent);box-shadow:0 0 30px #00f5d414}
+.search-symbol{padding-left:12px;color:var(--muted);font-size:22px}
+.search input{
+  flex:1;min-width:0;padding:13px 0;color:var(--text);
+  background:transparent;border:0;outline:none
+}
+.search input::placeholder{color:#75839e}
+.primary{
+  display:inline-flex;justify-content:center;align-items:center;gap:8px;
+  padding:13px 17px;color:#05110f;background:var(--accent);
+  border:0;border-radius:11px;font-weight:800;cursor:pointer;
+  transition:transform .2s,filter .2s
+}
+.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.section{padding:15px 0 30px}
+.game-card{
+  padding:clamp(17px,3vw,28px);
+  background:rgba(17,23,40,.9);
+  border:1px solid var(--border);border-radius:21px;
+  box-shadow:0 20px 70px #0002
+}
+.game-header{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px
+}
+.game-title{display:flex;align-items:center;gap:13px}
+.cookie-icon{
+  display:grid;place-items:center;width:51px;height:51px;
+  background:#231b30;border:1px solid #9b7bff44;
+  border-radius:15px;font-size:29px
+}
+h2{margin:0 0 7px;font-size:21px}
+.game-subtitle{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.version{
+  flex-shrink:0;padding:7px 10px;color:var(--accent);
+  background:#00f5d40c;border:1px solid #00f5d42b;
+  border-radius:8px;font-size:11px;font-weight:800
+}
+.game-actions{
+  display:flex;flex-wrap:wrap;gap:10px;margin:21px 0 15px
+}
+.secondary{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 15px;color:var(--text);background:var(--panel2);
+  border:1px solid var(--border);border-radius:11px;
+  cursor:pointer;font-size:13px
+}
+.secondary:hover{border-color:var(--accent)}
+.game-frame-wrap{
+  overflow:hidden;position:relative;
+  background:#090c14;border:1px solid var(--border);
+  border-radius:14px
+}
+.game-frame{display:block;width:100%;height:600px;border:0;background:#090c14}
+.frame-note{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-top:13px;padding:13px 14px;
+  color:var(--muted);background:#ffffff05;
+  border:1px solid var(--border);border-radius:12px;
+  font-size:12px;line-height:1.65
+}
+.note-icon{font-size:17px}
+.note-text strong{color:var(--text)}
+footer{
+  padding:25px 15px 35px;color:#75819b;
+  border-top:1px solid var(--border);text-align:center;
+  font-size:12px;line-height:1.9
+}
+@media(max-width:600px){
+  .topbar{padding:11px 12px}
+  .brand{font-size:16px;letter-spacing:2px;gap:8px}
+  .brand-mark{width:33px;height:33px}
+  .clock{display:none}
+  .disguise-button{padding:8px}
+  .disguise-button img{width:21px;height:21px}
+  .disguise-menu{width:230px}
+  .hero{padding:53px 0 35px}
+  h1{letter-spacing:-2px}
+  .search{gap:6px}
+  .search input{font-size:14px}
+  .primary{padding:12px}
+  .game-header{gap:8px}
+  .cookie-icon{width:43px;height:43px;font-size:25px}
+  h2{font-size:18px}
+  .version{font-size:10px;padding:6px}
+  .game-frame{height:520px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+}
+</style>
 </head>
 
 <body>
-  <header class="topbar">
-    <a class="brand" href="#" aria-label="LAJUJU home">
-      <span class="brand-icon"><span>L</span></span>
-      <span>LAJUJU</span>
-    </a>
+<header class="topbar">
+  <a href="#" class="brand" aria-label="LAJUJU home">
+    <span class="brand-mark">L</span><span>LAJUJU</span>
+  </a>
 
-    <div class="top-actions">
-      <time class="clock" id="clock">Loading time...</time>
+  <div class="top-right">
+    <time id="clock" class="clock">--:--:--</time>
 
-      <label>
-        <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">
-          Browser tab appearance
-        </span>
-        <select class="tab-select" id="tab-disguise"
-                aria-label="Change displayed browser tab title and icon">
-          <option value="default">◈ LAJUJU tab</option>
-          <option value="docs">▤ Docs tab</option>
-          <option value="classroom">▣ Classroom tab</option>
-          <option value="drive">◉ Drive tab</option>
-          <option value="calendar">▦ Calendar tab</option>
-          <option value="blank">○ Blank tab</option>
-        </select>
-      </label>
+    <div class="disguise">
+      <button id="disguise-button" class="disguise-button"
+        type="button" aria-haspopup="true" aria-expanded="false">
+        <img id="selected-icon"
+          src="https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64"
+          alt="">
+        <span id="selected-label">LAJUJU tab</span>
+        <span class="chevron">▾</span>
+      </button>
+
+      <div id="disguise-menu" class="disguise-menu" role="menu">
+        <div class="menu-heading">Tab appearance</div>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="true" data-choice="laj">
+          <img src="https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64" alt="">
+          <span class="option-copy"><strong>LAJUJU</strong><small>Default appearance</small></span>
+          <span class="check">✓</span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="docs">
+          <img src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=64" alt="">
+          <span class="option-copy"><strong>Google Docs</strong><small>Real product favicon</small></span>
+          <span class="check"></span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="classroom">
+          <img src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64" alt="">
+          <span class="option-copy"><strong>Google Classroom</strong><small>Real product favicon</small></span>
+          <span class="check"></span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="drive">
+          <img src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=64" alt="">
+          <span class="option-copy"><strong>Google Drive</strong><small>Real product favicon</small></span>
+          <span class="check"></span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="calendar">
+          <img src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64" alt="">
+          <span class="option-copy"><strong>Google Calendar</strong><small>Real product favicon</small></span>
+          <span class="check"></span>
+        </button>
+
+        <button class="disguise-option" type="button" role="menuitemradio"
+          aria-checked="false" data-choice="blank">
+          <img src="https://www.google.com/s2/favicons?domain=example.com&sz=64" alt="">
+          <span class="option-copy"><strong>Blank tab</strong><small>Neutral title and icon</small></span>
+          <span class="check"></span>
+        </button>
+      </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="eyebrow"><span class="dot"></span> Your digital space</div>
+<main class="container">
+  <section class="hero">
+    <div class="pill"><span class="live-dot"></span> Your digital space</div>
+    <h1>Welcome to <span class="gradient">LAJUJU.</span></h1>
+    <p class="subtitle">
+      A clean, futuristic place to search, play, and do your thing.
+    </p>
 
-      <h1>Welcome to <span class="gradient-text">LAJUJU.</span></h1>
+    <div class="search-wrap">
+      <form id="search-form" class="search">
+        <span class="search-symbol" aria-hidden="true">⌕</span>
+        <input id="search-input" type="search"
+          placeholder="Search the web..." aria-label="Search the web" required>
+        <button class="primary" type="submit">Search ↗</button>
+      </form>
+    </div>
+  </section>
 
-      <p class="subtitle">
-        One place for your searches, study tools, and games.
-        Clean design. Fast access. Your space.
-      </p>
-
-      <div class="search-wrap">
-        <form class="search" id="search-form" role="search">
-          <span class="search-icon" aria-hidden="true">⌕</span>
-          <input id="search-input" type="search"
-                 placeholder="Search the web..."
-                 aria-label="Search the web" autocomplete="off" required>
-          <button class="primary-button" type="submit">Search ↗</button>
-        </form>
-      </div>
-    </section>
-
-    <section class="section" aria-labelledby="apps-heading">
-      <div class="section-heading">
-        <div>
-          <h2 id="apps-heading">Study tools</h2>
-          <p>Your favorite tools, one click away.</p>
-        </div>
-        <span class="section-tag">QUICK ACCESS</span>
-      </div>
-
-      <div class="app-grid">
-        <a class="app-card" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">📄</span>
-          <span class="app-info"><strong>Google Docs</strong><span>Documents</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://slides.google.com/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">📊</span>
-          <span class="app-info"><strong>Google Slides</strong><span>Presentations</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">🎓</span>
-          <span class="app-info"><strong>Classroom</strong><span>Schoolwork</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">🗂️</span>
-          <span class="app-info"><strong>Google Drive</strong><span>Your files</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">📅</span>
-          <span class="app-info"><strong>Calendar</strong><span>Schedule</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://www.desmos.com/calculator" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">📈</span>
-          <span class="app-info"><strong>Desmos</strong><span>Graphing</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">🌐</span>
-          <span class="app-info"><strong>Wikipedia</strong><span>Learn something</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-
-        <a class="app-card" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">
-          <span class="app-icon">🔎</span>
-          <span class="app-info"><strong>Google</strong><span>Web search</span></span>
-          <span class="app-arrow">↗</span>
-        </a>
-      </div>
-    </section>
-
-    <div class="feature-grid">
-      <section class="feature-card" id="cookie-clicker">
-        <div class="feature-top">
+  <section class="section" id="cookie-clicker">
+    <div class="game-card">
+      <div class="game-header">
+        <div class="game-title">
+          <div class="cookie-icon" aria-hidden="true">🍪</div>
           <div>
             <h2>Cookie Clicker</h2>
-            <p>Original browser game by Orteil · Version 2.058</p>
+            <p class="game-subtitle">The original browser game by Orteil</p>
           </div>
-          <span class="feature-emoji" aria-hidden="true">🍪</span>
         </div>
+        <span class="version">VERSION 2.058</span>
+      </div>
 
+      <div class="game-actions">
+        <a class="primary" href="https://orteil.dashnet.org/cookieclicker/"
+          target="_blank" rel="noopener noreferrer">
+          Play Original Cookie Clicker ↗
+        </a>
+        <button class="secondary" id="reload-game" type="button">
+          ↻ Reload embedded game
+        </button>
+      </div>
+
+      <div class="game-frame-wrap">
         <iframe
-          class="game-frame"
           id="cookie-frame"
+          class="game-frame"
           src="https://orteil.dashnet.org/cookieclicker/"
-          title="Official Cookie Clicker browser game"
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allow="fullscreen">
+          title="Cookie Clicker official game version 2.058"
+          loading="eager"
+          allow="fullscreen"
+          referrerpolicy="strict-origin-when-cross-origin">
         </iframe>
+      </div>
 
-        <div class="game-actions">
-          <a class="primary-button"
-             href="https://orteil.dashnet.org/cookieclicker/"
-             target="_blank" rel="noopener noreferrer">
-            Open Original Game ↗
-          </a>
-
-          <button class="secondary-button" id="reload-game" type="button">
-            ↻ Reload game
-          </button>
+      <div class="frame-note">
+        <span class="note-icon">ⓘ</span>
+        <div class="note-text">
+          <strong>If the game area is blank or blocked:</strong>
+          the official website may prevent embedded play. Click
+          <strong>Play Original Cookie Clicker</strong> above to launch the
+          actual game directly. This uses Orteil's official site, so its
+          features and save system work there. A blocked iframe cannot be
+          repaired just by changing the frame's HTML.
         </div>
-
-        <p class="note">
-          If the game does not load inside this frame, use “Open Original Game.”
-          The official website controls the game and its saved progress.
-        </p>
-      </section>
-
-      <aside class="feature-card">
-        <div class="feature-top">
-          <div>
-            <h2>Your shortcuts</h2>
-            <p>Handy places to go next.</p>
-          </div>
-          <span class="feature-emoji" aria-hidden="true">✦</span>
-        </div>
-
-        <div class="quick-list">
-          <a class="quick-item" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-            <span class="app-icon">▶️</span>
-            <span class="app-info"><strong>YouTube</strong><p>Videos and tutorials</p></span>
-            <span class="app-arrow">↗</span>
-          </a>
-
-          <a class="quick-item" href="https://github.com/" target="_blank" rel="noopener noreferrer">
-            <span class="app-icon">💻</span>
-            <span class="app-info"><strong>GitHub</strong><p>Projects and code</p></span>
-            <span class="app-arrow">↗</span>
-          </a>
-
-          <a class="quick-item" href="https://www.khanacademy.org/" target="_blank" rel="noopener noreferrer">
-            <span class="app-icon">📚</span>
-            <span class="app-info"><strong>Khan Academy</strong><p>Learn and practice</p></span>
-            <span class="app-arrow">↗</span>
-          </a>
-
-          <a class="quick-item" href="https://www.google.com/search?q=online+timer" target="_blank" rel="noopener noreferrer">
-            <span class="app-icon">⏱️</span>
-            <span class="app-info"><strong>Online timer</strong><p>Focus sessions</p></span>
-            <span class="app-arrow">↗</span>
-          </a>
-        </div>
-
-        <div class="status-line">
-          <span class="dot"></span>
-          <span>LAJUJU is ready. Your shortcuts open in a separate tab.</span>
-        </div>
-      </aside>
+      </div>
     </div>
-  </main>
+  </section>
+</main>
 
-  <footer>
-    <div>LAJUJU · Your space on the web</div>
-    <div>External tools and games are provided by their respective websites.</div>
-  </footer>
+<footer>
+  LAJUJU · Your space on the web<br>
+  Cookie Clicker is created by Orteil. It is hosted externally.
+</footer>
 
-  <script>
-    // Live clock, using the visitor's local time.
-    const clock = document.getElementById("clock");
+<script>
+const clock = document.getElementById("clock");
 
-    function updateClock() {
-      clock.textContent = new Intl.DateTimeFormat(undefined, {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-      }).format(new Date());
-    }
+function updateClock() {
+  clock.textContent = new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  }).format(new Date());
+}
+updateClock();
+setInterval(updateClock, 1000);
 
-    updateClock();
-    setInterval(updateClock, 1000);
+// Search: submit a query to Google in a new tab.
+document.getElementById("search-form").addEventListener("submit", event => {
+  event.preventDefault();
+  const query = document.getElementById("search-input").value.trim();
+  if (!query) return;
+  window.open(
+    "https://www.google.com/search?q=" + encodeURIComponent(query),
+    "_blank",
+    "noopener,noreferrer"
+  );
+});
 
-    // Search opens results in a separate tab.
-    document.getElementById("search-form").addEventListener("submit", function (event) {
-      event.preventDefault();
+// Tab disguise menu: actual Google favicon service icons.
+const presets = {
+  laj: {
+    label: "LAJUJU tab",
+    title: "LAJUJU | Dashboard",
+    icon: "https://www.google.com/s2/favicons?domain=orteil.dashnet.org&sz=64"
+  },
+  docs: {
+    label: "Google Docs",
+    title: "Google Docs",
+    icon: "https://www.google.com/s2/favicons?domain=docs.google.com&sz=64"
+  },
+  classroom: {
+    label: "Classroom",
+    title: "Google Classroom",
+    icon: "https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64"
+  },
+  drive: {
+    label: "Google Drive",
+    title: "Google Drive",
+    icon: "https://www.google.com/s2/favicons?domain=drive.google.com&sz=64"
+  },
+  calendar: {
+    label: "Calendar",
+    title: "Google Calendar",
+    icon: "https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64"
+  },
+  blank: {
+    label: "Blank tab",
+    title: "New Tab",
+    icon: "https://www.google.com/s2/favicons?domain=example.com&sz=64"
+  }
+};
 
-      const query = document.getElementById("search-input").value.trim();
-      if (!query) return;
+const disguiseButton = document.getElementById("disguise-button");
+const disguiseMenu = document.getElementById("disguise-menu");
+const selectedIcon = document.getElementById("selected-icon");
+const selectedLabel = document.getElementById("selected-label");
+const tabIcon = document.getElementById("tab-icon");
 
-      const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(query);
-      window.open(searchUrl, "_blank", "noopener,noreferrer");
+function closeDisguiseMenu() {
+  disguiseMenu.classList.remove("open");
+  disguiseButton.setAttribute("aria-expanded", "false");
+}
+
+disguiseButton.addEventListener("click", () => {
+  const opening = !disguiseMenu.classList.contains("open");
+  disguiseMenu.classList.toggle("open", opening);
+  disguiseButton.setAttribute("aria-expanded", String(opening));
+});
+
+document.querySelectorAll(".disguise-option").forEach(button => {
+  button.addEventListener("click", () => {
+    const choice = button.dataset.choice;
+    const preset = presets[choice];
+    if (!preset) return;
+
+    document.title = preset.title;
+    selectedLabel.textContent = preset.label;
+    selectedIcon.src = preset.icon;
+    tabIcon.href = preset.icon;
+
+    document.querySelectorAll(".disguise-option").forEach(option => {
+      const selected = option === button;
+      option.setAttribute("aria-checked", String(selected));
+      option.querySelector(".check").textContent = selected ? "✓" : "";
     });
 
-    // Tab disguise: changes the visible title and favicon only.
-    // It does not navigate away or change the website address.
-    const tabSelect = document.getElementById("tab-disguise");
-    const favicon = document.getElementById("tab-icon");
+    closeDisguiseMenu();
+  });
+});
 
-    const tabPresets = {
-      default: {
-        title: "LAJUJU | Dashboard",
-        letter: "L",
-        color: "#00f5d4",
-        background: "#080b14"
-      },
-      docs: {
-        title: "Google Docs",
-        letter: "D",
-        color: "#4285f4",
-        background: "#ffffff"
-      },
-      classroom: {
-        title: "Google Classroom",
-        letter: "C",
-        color: "#34a853",
-        background: "#ffffff"
-      },
-      drive: {
-        title: "Google Drive",
-        letter: "D",
-        color: "#4285f4",
-        background: "#ffffff"
-      },
-      calendar: {
-        title: "Google Calendar",
-        letter: "31",
-        color: "#4285f4",
-        background: "#ffffff"
-      },
-      blank: {
-        title: "New Tab",
-        letter: " ",
-        color: "#9aa8c4",
-        background: "#111728"
-      }
-    };
+document.addEventListener("click", event => {
+  if (!event.target.closest(".disguise")) closeDisguiseMenu();
+});
 
-    function updateTabAppearance(choice) {
-      const preset = tabPresets[choice] || tabPresets.default;
-      document.title = preset.title;
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeDisguiseMenu();
+});
 
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-          <rect width="100" height="100" rx="22" fill="${preset.background}"/>
-          <text x="50" y="66" text-anchor="middle"
-            font-family="Arial,sans-serif" font-size="${preset.letter.length > 1 ? 42 : 58}"
-            font-weight="bold" fill="${preset.color}">${preset.letter}</text>
-        </svg>`;
-
-      favicon.href = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
-    }
-
-    tabSelect.addEventListener("change", function () {
-      updateTabAppearance(tabSelect.value);
-    });
-
-    // Reload the embedded game without changing the rest of the page.
-    document.getElementById("reload-game").addEventListener("click", function () {
-      const frame = document.getElementById("cookie-frame");
-      frame.src = "https://orteil.dashnet.org/cookieclicker/";
-    });
-  </script>
+// Retry the official embedded game.
+document.getElementById("reload-game").addEventListener("click", () => {
+  const frame = document.getElementById("cookie-frame");
+  frame.src = "about:blank";
+  setTimeout(() => {
+    frame.src = "https://orteil.dashnet.org/cookieclicker/";
+  }, 100);
+});
+</script>
 </body>
 </html>
