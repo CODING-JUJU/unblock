@@ -1,0 +1,535 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080b14">
+<title>LAJUJU</title>
+<style>
+:root {
+  --bg:#080b14;
+  --panel:#111a2a;
+  --line:#263752;
+  --text:#edf5ff;
+  --muted:#8b9bb3;
+  --blue:#70dfff;
+  --purple:#a99aff;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,system-ui,Arial,sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 30%,#172b4c 0%,transparent 48%),
+    radial-gradient(ellipse at 90% 0%,#291b48 0%,transparent 35%),
+    var(--bg);
+  overflow-x:hidden;
+}
+body:before {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(#8abfff08 1px,transparent 1px),
+    linear-gradient(90deg,#8abfff08 1px,transparent 1px);
+  background-size:38px 38px;
+  mask-image:linear-gradient(#000,transparent 90%);
+}
+header {
+  position:relative;
+  z-index:5;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 6%;
+  height:76px;
+  border-bottom:1px solid #ffffff10;
+  background:#080b1480;
+  backdrop-filter:blur(15px);
+}
+.brand {
+  font-size:23px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+.brand span {
+  color:var(--blue);
+  text-shadow:0 0 20px #70dfff66;
+}
+.menu-wrap {position:relative}
+.menu-button {
+  padding:11px 15px;
+  background:#142238;
+  border:1px solid var(--line);
+  color:white;
+  border-radius:11px;
+  cursor:pointer;
+}
+.dropdown {
+  display:none;
+  position:absolute;
+  right:0;
+  top:48px;
+  width:235px;
+  padding:8px;
+  background:#101827;
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 18px 50px #0009;
+}
+.dropdown.open {display:block}
+.dropdown a {
+  display:block;
+  color:var(--text);
+  text-decoration:none;
+  padding:12px;
+  border-radius:8px;
+  font-size:13px;
+}
+.dropdown a:hover {background:#203049}
+.dropdown small {
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+}
+main {
+  width:min(960px,90%);
+  margin:auto;
+  padding:65px 0 60px;
+  position:relative;
+}
+.hero {text-align:center}
+.eyebrow {
+  color:var(--blue);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:4px;
+}
+h1 {
+  margin:20px 0 12px;
+  font-size:clamp(44px,8vw,75px);
+  letter-spacing:-4px;
+}
+h1 span {
+  color:transparent;
+  background:linear-gradient(100deg,#fff,#70dfff,#b5a2ff);
+  background-clip:text;
+}
+.subtitle {
+  color:var(--muted);
+  font-size:14px;
+}
+.search {
+  max-width:650px;
+  margin:30px auto 0;
+  padding:7px 8px 7px 18px;
+  display:flex;
+  gap:10px;
+  background:#101827e8;
+  border:1px solid var(--line);
+  border-radius:15px;
+}
+.search:focus-within {border-color:#70dfff99}
+.search input {
+  flex:1;
+  min-width:0;
+  background:transparent;
+  border:0;
+  outline:0;
+  color:white;
+  padding:12px 0;
+  font-size:14px;
+}
+.search button,.primary {
+  border:0;
+  border-radius:10px;
+  background:linear-gradient(110deg,#70dfff,#b3c7ff);
+  color:#07101a;
+  padding:12px 17px;
+  font-weight:800;
+  cursor:pointer;
+}
+.section-title {
+  margin:45px 0 15px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+}
+.shortcuts {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:13px;
+}
+.shortcut {
+  text-decoration:none;
+  color:white;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#111a2ad9;
+  transition:.2s;
+}
+.shortcut:hover {
+  transform:translateY(-3px);
+  border-color:#70dfff88;
+}
+.shortcut .icon {font-size:25px;margin-bottom:14px}
+.shortcut strong {font-size:12px;display:block}
+.shortcut small {
+  display:block;
+  margin-top:6px;
+  color:var(--muted);
+  font-size:10px;
+}
+.game {
+  border:1px solid #314360;
+  background:linear-gradient(145deg,#142137ed,#0e1524ed);
+  border-radius:22px;
+  padding:26px;
+  text-align:center;
+  box-shadow:0 20px 70px #0003;
+}
+.game h2 {margin:0;font-size:25px}
+.game-desc {color:var(--muted);font-size:13px}
+.cookie-count {
+  font-size:clamp(28px,5vw,42px);
+  font-weight:900;
+  margin:22px 0 4px;
+  color:var(--blue);
+  font-variant-numeric:tabular-nums;
+}
+.per-second {font-size:12px;color:var(--muted)}
+.cookie {
+  display:block;
+  margin:18px auto;
+  border:0;
+  background:transparent;
+  font-size:100px;
+  cursor:pointer;
+  filter:drop-shadow(0 0 22px #d6a15c44);
+  transition:transform .12s;
+  user-select:none;
+}
+.cookie:hover {transform:scale(1.08) rotate(-5deg)}
+.cookie:active {transform:scale(.88)}
+.upgrades {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:24px;
+  text-align:left;
+}
+.upgrade {
+  padding:16px;
+  color:white;
+  background:#18263b;
+  border:1px solid #2a3e59;
+  border-radius:13px;
+  cursor:pointer;
+  text-align:left;
+}
+.upgrade:hover {border-color:var(--blue)}
+.upgrade:disabled {opacity:.48;cursor:not-allowed}
+.upgrade strong {display:block;margin-bottom:6px;font-size:13px}
+.upgrade small {color:var(--muted);font-size:11px}
+.upgrade .cost {
+  display:block;
+  color:var(--blue);
+  font-weight:800;
+  font-size:12px;
+  margin-top:10px;
+}
+.game-bottom {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+.reset {
+  border:1px solid var(--line);
+  color:var(--muted);
+  background:transparent;
+  border-radius:9px;
+  padding:9px 12px;
+  cursor:pointer;
+}
+#message {font-size:12px;color:#ffd08a;min-height:18px}
+footer {
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:22px 6%;
+  border-top:1px solid #ffffff0c;
+  color:#667890;
+  font-size:11px;
+}
+@media(max-width:650px) {
+  header {padding:0 5%;height:68px}
+  main {padding-top:48px}
+  h1 {letter-spacing:-2px}
+  .shortcuts {grid-template-columns:repeat(2,1fr)}
+  .upgrades {grid-template-columns:1fr}
+  .game {padding:19px}
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*:before,*:after {animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">LA<span>JUJU</span></div>
+  <div class="menu-wrap">
+    <button class="menu-button" id="menuButton"
+      aria-expanded="false" aria-controls="dropdown">
+      Study tools ▾
+    </button>
+    <nav class="dropdown" id="dropdown">
+      <a href="https://docs.google.com/">📄 Google Docs
+        <small>Documents and writing</small></a>
+      <a href="https://slides.google.com/">📊 Google Slides
+        <small>Presentations</small></a>
+      <a href="https://classroom.google.com/">🎓 Google Classroom
+        <small>Classes and assignments</small></a>
+      <a href="https://drive.google.com/">📁 Google Drive
+        <small>Cloud files</small></a>
+      <a href="https://calendar.google.com/">📅 Calendar
+        <small>Plan your day</small></a>
+      <a href="https://www.desmos.com/calculator">📐 Desmos
+        <small>Graphing calculator</small></a>
+      <a href="https://www.wikipedia.org/">🌎 Wikipedia
+        <small>Explore and learn</small></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow">YOUR SPACE · YOUR PACE</div>
+    <h1>Welcome to <span>LAJUJU.</span></h1>
+    <p class="subtitle">Explore ideas. Get things done. Take a break.</p>
+    <form class="search" id="searchForm">
+      <input id="query" placeholder="Search the web or enter a URL..."
+        aria-label="Search the web or enter a URL" autocomplete="off">
+      <button type="submit">Search ↗</button>
+    </form>
+  </section>
+
+  <div class="section-title">QUICK ACCESS</div>
+  <section class="shortcuts">
+    <a class="shortcut" href="https://docs.google.com/">
+      <div class="icon">📄</div><strong>Documents</strong>
+      <small>Write something great</small>
+    </a>
+    <a class="shortcut" href="https://slides.google.com/">
+      <div class="icon">📊</div><strong>Presentations</strong>
+      <small>Bring ideas to life</small>
+    </a>
+    <a class="shortcut" href="https://classroom.google.com/">
+      <div class="icon">🎓</div><strong>Classroom</strong>
+      <small>Schoolwork and classes</small>
+    </a>
+    <a class="shortcut" href="https://drive.google.com/">
+      <div class="icon">☁️</div><strong>My files</strong>
+      <small>Open Google Drive</small>
+    </a>
+  </section>
+
+  <div class="section-title">COOKIE LAB · MINI GAME</div>
+  <section class="game">
+    <h2>🍪 Cookie Clicker</h2>
+    <p class="game-desc">Bake cookies, buy upgrades, and build your cookie empire.</p>
+    <div class="cookie-count" id="count">0 cookies</div>
+    <div class="per-second" id="rate">0 cookies per second</div>
+    <button class="cookie" id="cookie" aria-label="Bake a cookie">🍪</button>
+    <div>Each click: <strong id="power">1</strong> cookie</div>
+
+    <div class="upgrades">
+      <button class="upgrade" id="clickUpgrade">
+        <strong>🥄 Stronger clicks</strong>
+        <small>Get one extra cookie per click.</small>
+        <span class="cost">Cost: <span id="clickCost">25</span> 🍪</span>
+      </button>
+      <button class="upgrade" id="autoUpgrade">
+        <strong>🤖 Auto-baker</strong>
+        <small>Automatically bake one cookie per second.</small>
+        <span class="cost">Cost: <span id="autoCost">50</span> 🍪</span>
+      </button>
+    </div>
+
+    <div class="game-bottom">
+      <span id="message" aria-live="polite">Your cookie empire starts now!</span>
+      <button class="reset" id="reset">Reset progress</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>LAJUJU · YOUR DIGITAL SPACE</span>
+  <span id="clock"></span>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// Study menu
+const menuButton = $("menuButton");
+const dropdown = $("dropdown");
+
+menuButton.addEventListener("click", () => {
+  const open = dropdown.classList.toggle("open");
+  menuButton.setAttribute("aria-expanded", String(open));
+});
+document.addEventListener("click", e => {
+  if (!e.target.closest(".menu-wrap")) {
+    dropdown.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+  }
+});
+
+// Search: direct URLs or Google search
+$("searchForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const value = $("query").value.trim();
+  if (!value) return;
+
+  let url = null;
+  try {
+    const candidate = /^[a-zA-Z][a-zA-Z\d+.-]*:/.test(value)
+      ? value : "https://" + value;
+    const parsed = new URL(candidate);
+    if (["http:", "https:"].includes(parsed.protocol) &&
+        parsed.hostname.includes(".")) url = parsed.href;
+  } catch (_) {}
+
+  location.href = url ||
+    "https://www.google.com/search?q=" + encodeURIComponent(value);
+});
+
+// Cookie game
+const STORAGE_KEY = "lajuju-cookie-save-v1";
+const fresh = () => ({
+  cookies: 0,
+  total: 0,
+  power: 1,
+  bakers: 0,
+  clickCost: 25,
+  autoCost: 50,
+  lastSaved: Date.now()
+});
+let state = fresh();
+
+try {
+  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+  if (saved && Number.isFinite(saved.cookies) &&
+      Number.isFinite(saved.power) &&
+      Number.isFinite(saved.bakers) &&
+      Number.isFinite(saved.clickCost) &&
+      Number.isFinite(saved.autoCost)) {
+    state = {...fresh(), ...saved};
+    state.cookies = Math.max(0, state.cookies);
+    state.total = Math.max(0, Number(state.total) || 0);
+    state.power = Math.max(1, state.power);
+    state.bakers = Math.max(0, state.bakers);
+    // Offline production, capped at 8 hours.
+    const elapsed = Math.min(
+      8 * 60 * 60,
+      Math.max(0, (Date.now() - (state.lastSaved || Date.now())) / 1000)
+    );
+    const earned = elapsed * state.bakers;
+    state.cookies += earned;
+    state.total += earned;
+  }
+} catch (_) {
+  state = fresh();
+}
+
+function save() {
+  state.lastSaved = Date.now();
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (_) {}
+}
+
+function fmt(n) {
+  return Math.floor(n).toLocaleString();
+}
+
+function render() {
+  $("count").textContent = fmt(state.cookies) + " cookies";
+  $("rate").textContent = fmt(state.bakers) + " cookies per second";
+  $("power").textContent = fmt(state.power);
+  $("clickCost").textContent = fmt(state.clickCost);
+  $("autoCost").textContent = fmt(state.autoCost);
+  $("clickUpgrade").disabled = state.cookies < state.clickCost;
+  $("autoUpgrade").disabled = state.cookies < state.autoCost;
+}
+
+$("cookie").addEventListener("click", () => {
+  state.cookies += state.power;
+  state.total += state.power;
+  $("message").textContent = "+" + fmt(state.power) + " cookies!";
+  render();
+  save();
+});
+
+$("clickUpgrade").addEventListener("click", () => {
+  if (state.cookies < state.clickCost) return;
+  state.cookies -= state.clickCost;
+  state.power++;
+  state.clickCost = Math.ceil(state.clickCost * 1.8);
+  $("message").textContent = "Click power upgraded!";
+  render();
+  save();
+});
+
+$("autoUpgrade").addEventListener("click", () => {
+  if (state.cookies < state.autoCost) return;
+  state.cookies -= state.autoCost;
+  state.bakers++;
+  state.autoCost = Math.ceil(state.autoCost * 1.7);
+  $("message").textContent = "Auto-baker purchased!";
+  render();
+  save();
+});
+
+$("reset").addEventListener("click", () => {
+  if (!confirm("Reset your cookie progress? This cannot be undone.")) return;
+  state = fresh();
+  $("message").textContent = "A fresh cookie empire!";
+  render();
+  save();
+});
+
+setInterval(() => {
+  if (state.bakers > 0) {
+    state.cookies += state.bakers;
+    state.total += state.bakers;
+    render();
+  }
+}, 1000);
+
+setInterval(save, 5000);
+window.addEventListener("beforeunload", save);
+render();
+save();
+
+// Live clock
+function updateClock() {
+  $("clock").textContent = new Date().toLocaleTimeString([], {
+    hour: "2-digit", minute: "2-digit", second: "2-digit"
+  });
+}
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
