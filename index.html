@@ -2,824 +2,741 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080b14">
-<title>LAJUJU</title>
-
-<!-- Plain black LAJUJU tab icon -->
-<link id="tab-icon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
-
-<style>
-:root {
-  --bg: #080b14;
-  --panel: rgba(16, 23, 40, .9);
-  --panel2: #171f33;
-  --text: #edf2ff;
-  --muted: #9aa8c4;
-  --accent: #00f5d4;
-  --purple: #9b7bff;
-  --border: rgba(160,180,220,.16);
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  overflow-x: hidden;
-  color: var(--text);
-  background: var(--bg);
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  inset: -40%;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at 25% 30%, rgba(0,245,212,.17), transparent 34%),
-    radial-gradient(ellipse at 75% 25%, rgba(155,123,255,.19), transparent 34%),
-    radial-gradient(ellipse at 65% 80%, rgba(25,76,180,.16), transparent 38%),
-    radial-gradient(ellipse at 15% 85%, rgba(0,180,170,.1), transparent 32%);
-  background-size: 150% 150%;
-  animation: drifting-background 22s ease-in-out infinite alternate;
-}
-
-@keyframes drifting-background {
-  0% {
-    transform: translate(-4%, -2%) rotate(0deg) scale(1);
-    background-position: 0% 20%;
-  }
-  50% {
-    transform: translate(3%, 3%) rotate(4deg) scale(1.08);
-    background-position: 100% 70%;
-  }
-  100% {
-    transform: translate(-2%, 5%) rotate(-3deg) scale(1.04);
-    background-position: 20% 100%;
-  }
-}
-
-button, input { font: inherit; }
-a { color: inherit; text-decoration: none; }
-
-button:focus-visible, a:focus-visible, input:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 13px clamp(14px, 4vw, 46px);
-  background: rgba(8,11,20,.85);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(20px);
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  font-size: 21px;
-  font-weight: 900;
-  letter-spacing: 3px;
-}
-
-.brand-mark {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  color: #06110f;
-  background: var(--accent);
-  border-radius: 12px;
-  box-shadow: 0 0 25px #00f5d433;
-  font-size: 23px;
-}
-
-.top-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.clock {
-  color: var(--muted);
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-
-.disguise { position: relative; }
-
-.disguise-button {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 12px;
-  color: var(--text);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-.disguise-button:hover { border-color: var(--accent); }
-
-.disguise-button img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-}
-
-.chevron { color: var(--muted); }
-
-.disguise-menu {
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  width: 255px;
-  padding: 8px;
-  display: none;
-  background: #111728;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  box-shadow: 0 20px 55px #0009;
-}
-
-.disguise-menu.open { display: block; }
-
-.menu-heading {
-  padding: 9px 10px;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.disguise-option {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 11px 10px;
-  color: var(--text);
-  background: transparent;
-  border: 0;
-  border-radius: 10px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.disguise-option:hover,
-.disguise-option[aria-checked="true"] {
-  background: var(--panel2);
-}
-
-.disguise-option img {
-  width: 27px;
-  height: 27px;
-  object-fit: contain;
-}
-
-.option-copy { flex: 1; }
-.option-copy strong { display: block; font-size: 13px; }
-.option-copy small {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.check { color: var(--accent); }
-
-.container {
-  width: min(1000px, calc(100% - 30px));
-  margin: auto;
-}
-
-.hero {
-  padding: 76px 0 48px;
-  text-align: center;
-}
-
-.pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  color: var(--accent);
-  background: #00f5d40d;
-  border: 1px solid #00f5d433;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-}
-
-.live-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
-}
-
-h1 {
-  margin: 23px 0 13px;
-  font-size: clamp(43px, 8vw, 76px);
-  letter-spacing: -3px;
-  line-height: 1.06;
-}
-
-.gradient {
-  color: transparent;
-  background: linear-gradient(100deg, var(--accent), #9b91ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-}
-
-.subtitle {
-  max-width: 530px;
-  margin: auto;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.8;
-}
-
-.search-wrap {
-  max-width: 670px;
-  margin: 30px auto 0;
-}
-
-.search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px;
-  background: rgba(18,25,42,.94);
-  border: 1px solid #00f5d444;
-  border-radius: 16px;
-  transition: border-color .2s, box-shadow .2s;
-}
-
-.search:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 30px #00f5d414;
-}
-
-.search-symbol {
-  padding-left: 12px;
-  color: var(--muted);
-  font-size: 22px;
-}
-
-.search input {
-  flex: 1;
-  min-width: 0;
-  padding: 13px 0;
-  color: var(--text);
-  background: transparent;
-  border: 0;
-  outline: none;
-}
-
-.search input::placeholder { color: #75839e; }
-
-.primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px 17px;
-  color: #05110f;
-  background: var(--accent);
-  border: 0;
-  border-radius: 11px;
-  font-weight: 800;
-  cursor: pointer;
-  transition: transform .2s, filter .2s;
-}
-
-.primary:hover {
-  filter: brightness(1.1);
-  transform: translateY(-1px);
-}
-
-.game-card {
-  margin: 10px 0 48px;
-  padding: clamp(17px, 3vw, 28px);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 21px;
-  box-shadow: 0 20px 70px #0002;
-  backdrop-filter: blur(10px);
-}
-
-.game-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-}
-
-.game-title {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
-
-.cookie-icon {
-  width: 51px;
-  height: 51px;
-  display: grid;
-  place-items: center;
-  background: #231b30;
-  border: 1px solid #9b7bff44;
-  border-radius: 15px;
-  font-size: 29px;
-}
-
-h2 { margin: 0 0 7px; font-size: 21px; }
-
-.game-subtitle {
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.version {
-  flex-shrink: 0;
-  padding: 7px 10px;
-  color: var(--accent);
-  background: #00f5d40c;
-  border: 1px solid #00f5d42b;
-  border-radius: 8px;
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.game-launch {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 17px;
-  margin-top: 22px;
-  padding: 35px 20px;
-  background:
-    radial-gradient(ellipse at 50% 0%, #9b7bff16, transparent 65%),
-    rgba(5,8,15,.65);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
-
-.big-cookie {
-  font-size: 68px;
-  filter: drop-shadow(0 0 22px #d79a4c38);
-  animation: cookie-float 4s ease-in-out infinite;
-}
-
-@keyframes cookie-float {
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-8px) rotate(5deg); }
-}
-
-.game-launch h3 {
-  margin: 0;
-  font-size: 23px;
-}
-
-.game-launch p {
-  max-width: 490px;
-  margin: 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.8;
-}
-
-.launch-button {
-  min-width: min(100%, 310px);
-  padding: 16px 20px;
-  font-size: 15px;
-}
-
-.secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 15px;
-  color: var(--text);
-  background: var(--panel2);
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.secondary:hover { border-color: var(--accent); }
-
-.embed-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 17px;
-  padding: 13px 15px;
-  background: #ffffff05;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
-
-.embed-toggle strong { font-size: 12px; }
-.embed-toggle p {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.game-frame-wrap {
-  display: none;
-  overflow: hidden;
-  margin-top: 15px;
-  background: #090c14;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-}
-
-.game-frame-wrap.visible { display: block; }
-
-.game-frame {
-  display: block;
-  width: 100%;
-  height: 650px;
-  background: #090c14;
-  border: 0;
-}
-
-.note {
-  margin: 15px 0 0;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-}
-
-footer {
-  padding: 24px 15px 35px;
-  color: #75819b;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  font-size: 12px;
-  line-height: 1.9;
-}
-
-@media (max-width: 600px) {
-  .topbar { padding: 11px 12px; }
-  .brand { font-size: 16px; letter-spacing: 2px; gap: 8px; }
-  .brand-mark { width: 33px; height: 33px; }
-  .clock { display: none; }
-  .disguise-button { padding: 8px; font-size: 12px; }
-  .disguise-button img { width: 21px; height: 21px; }
-  .disguise-menu { width: 235px; }
-  .hero { padding: 54px 0 35px; }
-  h1 { letter-spacing: -2px; }
-  .search { gap: 6px; }
-  .search input { font-size: 14px; }
-  .primary { padding: 12px; }
-  .game-header { gap: 8px; }
-  .cookie-icon { width: 43px; height: 43px; font-size: 25px; }
-  h2 { font-size: 18px; }
-  .version { padding: 6px; font-size: 10px; }
-  .game-launch { padding: 27px 14px; }
-  .game-frame { height: 520px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation: none !important;
-    scroll-behavior: auto !important;
-    transition: none !important;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070910">
+  <title>LAJUJU</title>
+
+  <!-- Plain black LAJUJU tab icon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
+
+  <style>
+    :root {
+      --bg: #070910;
+      --panel: rgba(17, 21, 38, 0.82);
+      --border: rgba(115, 126, 255, 0.24);
+      --text: #f4f5ff;
+      --muted: #9ba3c4;
+      --cyan: #55efff;
+      --purple: #a16eff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    /* Animated moving background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -45%;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 20% 30%,
+          rgba(0, 225, 255, .20), transparent 34%),
+        radial-gradient(ellipse at 75% 25%,
+          rgba(132, 64, 255, .23), transparent 35%),
+        radial-gradient(ellipse at 60% 80%,
+          rgba(0, 100, 255, .16), transparent 35%),
+        radial-gradient(ellipse at 15% 85%,
+          rgba(255, 40, 180, .10), transparent 32%);
+      filter: blur(22px);
+      animation: backgroundDrift 18s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        linear-gradient(rgba(130, 150, 255, .09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(130, 150, 255, .09) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+
+    @keyframes backgroundDrift {
+      0% {
+        transform: translate(-4%, -2%) rotate(0deg) scale(1);
+      }
+      50% {
+        transform: translate(4%, 3%) rotate(8deg) scale(1.08);
+      }
+      100% {
+        transform: translate(-2%, 5%) rotate(-6deg) scale(1.02);
+      }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 15px 6%;
+      background: rgba(7, 9, 16, .78);
+      border-bottom: 1px solid rgba(120, 135, 255, .17);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 950;
+      letter-spacing: 3px;
+      background: linear-gradient(100deg, #fff, var(--cyan), var(--purple));
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .clock {
+      color: var(--muted);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .menu-wrap {
+      position: relative;
+    }
+
+    .menu-button, .small-button {
+      color: var(--text);
+      background: rgba(30, 35, 59, .9);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 10px 13px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .menu-button:hover, .small-button:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 20px rgba(85, 239, 255, .13);
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 10px);
+      width: 230px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: #101426;
+      box-shadow: 0 16px 45px #0009;
+    }
+
+    .dropdown.open {
+      display: block;
+    }
+
+    .dropdown p {
+      color: var(--muted);
+      margin: 7px 9px;
+      font-size: 12px;
+    }
+
+    .dropdown button {
+      display: block;
+      width: 100%;
+      padding: 11px;
+      text-align: left;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      border-radius: 9px;
+      cursor: pointer;
+    }
+
+    .dropdown button:hover {
+      background: rgba(105, 119, 255, .15);
+    }
+
+    .hero {
+      width: min(1000px, 90%);
+      margin: 65px auto 35px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--cyan);
+      background: rgba(40, 50, 100, .22);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 22px 0 12px;
+      font-size: clamp(48px, 9vw, 88px);
+      font-weight: 950;
+      letter-spacing: -4px;
+      line-height: 1;
+      background: linear-gradient(110deg, #fff 15%, var(--cyan) 52%, var(--purple));
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+      filter: drop-shadow(0 0 25px rgba(85, 239, 255, .12));
+    }
+
+    .hero p {
+      margin: 0 auto 28px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .search {
+      display: flex;
+      width: min(650px, 100%);
+      margin: auto;
+      padding: 7px;
+      gap: 8px;
+      border: 1px solid rgba(123, 137, 255, .32);
+      border-radius: 16px;
+      background: rgba(13, 17, 31, .86);
+      box-shadow: 0 0 35px rgba(78, 104, 255, .09);
+    }
+
+    .search input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px;
+      color: white;
+      background: transparent;
+      border: 0;
+      outline: none;
+    }
+
+    .search button, .primary-button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 11px;
+      color: #050810;
+      background: linear-gradient(110deg, var(--cyan), #9eb3ff);
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s ease;
+      white-space: nowrap;
+    }
+
+    .search button:hover, .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px rgba(85, 239, 255, .2);
+    }
+
+    main {
+      width: min(1100px, 90%);
+      margin: 0 auto 70px;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin: 42px 0 18px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -.6px;
+    }
+
+    .section-heading p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .app-card {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 17px;
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+
+    .app-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(85, 239, 255, .7);
+      box-shadow: 0 12px 35px rgba(30, 170, 255, .09);
+    }
+
+    .app-icon {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      object-fit: contain;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, .04);
+    }
+
+    .app-name {
+      font-weight: 750;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .app-description {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .game-panel {
+      overflow: hidden;
+      border: 1px solid rgba(161, 110, 255, .35);
+      border-radius: 19px;
+      background: rgba(12, 15, 27, .93);
+      box-shadow: 0 0 45px rgba(112, 77, 255, .08);
+    }
+
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .game-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cookie-emoji {
+      font-size: 31px;
+    }
+
+    .game-title h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .game-title p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .game-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .game-frame {
+      display: block;
+      width: 100%;
+      height: 780px;
+      border: 0;
+      background: #111;
+    }
+
+    .game-note {
+      padding: 13px 17px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer {
+      padding: 25px 5%;
+      color: #858ba8;
+      border-top: 1px solid rgba(120, 135, 255, .14);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 850px) {
+      .app-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero {
+        margin-top: 45px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar {
+        padding: 13px 5%;
+      }
+
+      .brand {
+        font-size: 19px;
+      }
+
+      .clock {
+        display: none;
+      }
+
+      .hero {
+        width: 90%;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .app-grid {
+        gap: 10px;
+      }
+
+      .app-card {
+        gap: 9px;
+        padding: 12px 10px;
+      }
+
+      .app-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+      }
+
+      .app-name {
+        font-size: 12px;
+      }
+
+      .search button {
+        padding: 11px;
+      }
+
+      .game-frame {
+        height: 650px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
-<header class="topbar">
-  <a href="#" class="brand" aria-label="LAJUJU home">
-    <span class="brand-mark">L</span>
-    <span>LAJUJU</span>
-  </a>
+  <header class="topbar">
+    <a href="#" class="brand" aria-label="LAJUJU home">LAJUJU</a>
 
-  <div class="top-right">
-    <time id="clock" class="clock">--:--:--</time>
+    <div class="top-actions">
+      <div class="clock" id="clock">Loading time...</div>
 
-    <div class="disguise">
-      <button id="disguise-button" class="disguise-button"
-        type="button" aria-haspopup="true" aria-expanded="false">
-        <img id="selected-icon" alt=""
-          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
-        <span id="selected-label">LAJUJU tab</span>
-        <span class="chevron">▾</span>
-      </button>
-
-      <div id="disguise-menu" class="disguise-menu" role="menu">
-        <div class="menu-heading">Tab appearance</div>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="true" data-choice="laj">
-          <img alt="" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
-          <span class="option-copy"><strong>LAJUJU</strong><small>Black square icon</small></span>
-          <span class="check">✓</span>
+      <div class="menu-wrap">
+        <button class="menu-button" id="menuButton"
+          aria-expanded="false" aria-controls="tabMenu">
+          Tab options ▾
         </button>
 
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="docs">
-          <img alt="Google Docs" src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=64">
-          <span class="option-copy"><strong>Google Docs</strong><small>Google product icon</small></span>
-          <span class="check"></span>
-        </button>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="slides">
-          <img alt="Google Slides" src="https://www.google.com/s2/favicons?domain=slides.google.com&sz=64">
-          <span class="option-copy"><strong>Google Slides</strong><small>Google product icon</small></span>
-          <span class="check"></span>
-        </button>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="classroom">
-          <img alt="Google Classroom" src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64">
-          <span class="option-copy"><strong>Google Classroom</strong><small>Google product icon</small></span>
-          <span class="check"></span>
-        </button>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="drive">
-          <img alt="Google Drive" src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=64">
-          <span class="option-copy"><strong>Google Drive</strong><small>Google product icon</small></span>
-          <span class="check"></span>
-        </button>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="calendar">
-          <img alt="Google Calendar" src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64">
-          <span class="option-copy"><strong>Google Calendar</strong><small>Google product icon</small></span>
-          <span class="check"></span>
-        </button>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="gmail">
-          <img alt="Gmail" src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=64">
-          <span class="option-copy"><strong>Gmail</strong><small>Google product icon</small></span>
-          <span class="check"></span>
-        </button>
-
-        <button class="disguise-option" type="button" role="menuitemradio"
-          aria-checked="false" data-choice="blank">
-          <img alt="" src="https://www.google.com/s2/favicons?domain=example.com&sz=64">
-          <span class="option-copy"><strong>Blank tab</strong><small>Neutral title</small></span>
-          <span class="check"></span>
-        </button>
-      </div>
-    </div>
-  </div>
-</header>
-
-<main class="container">
-  <section class="hero">
-    <div class="pill"><span class="live-dot"></span> Your digital space</div>
-    <h1>Welcome to <span class="gradient">LAJUJU.</span></h1>
-    <p class="subtitle">
-      A clean, futuristic place to search, play, and do your thing.
-    </p>
-
-    <div class="search-wrap">
-      <form id="search-form" class="search">
-        <span class="search-symbol" aria-hidden="true">⌕</span>
-        <input id="search-input" type="search"
-          placeholder="Search the web..." aria-label="Search the web" required>
-        <button class="primary" type="submit">Search ↗</button>
-      </form>
-    </div>
-  </section>
-
-  <section class="game-card" id="cookie-clicker">
-    <div class="game-header">
-      <div class="game-title">
-        <div class="cookie-icon" aria-hidden="true">🍪</div>
-        <div>
-          <h2>Cookie Clicker</h2>
-          <p class="game-subtitle">The original browser game by Orteil</p>
+        <div class="dropdown" id="tabMenu">
+          <p>Change tab appearance</p>
+          <button data-title="Google Classroom"
+            data-icon="classroom.google.com">Google Classroom</button>
+          <button data-title="Google Docs"
+            data-icon="docs.google.com">Google Docs</button>
+          <button data-title="Google Drive"
+            data-icon="drive.google.com">Google Drive</button>
+          <button data-title="Google Calendar"
+            data-icon="calendar.google.com">Google Calendar</button>
+          <button data-title="Gmail"
+            data-icon="mail.google.com">Gmail</button>
+          <button id="resetTab">Reset to LAJUJU</button>
+          <p>Changes the tab title and icon only.</p>
         </div>
       </div>
-      <span class="version">VERSION 2.058</span>
     </div>
+  </header>
 
-    <div class="game-launch">
-      <div class="big-cookie" aria-hidden="true">🍪</div>
-      <h3>Ready to bake?</h3>
-      <p>
-        Launch the official Cookie Clicker game. This opens the real game
-        directly, so its buildings, upgrades, achievements, and save system
-        are not dependent on LAJUJU's embedded frame.
-      </p>
-      <a class="primary launch-button"
-        href="https://orteil.dashnet.org/cookieclicker/"
-        target="_blank" rel="noopener noreferrer">
-        Play Original Cookie Clicker ↗
-      </a>
-      <p>Official game hosted by Orteil · Opens in a new tab</p>
-    </div>
+  <section class="hero">
+    <div class="eyebrow">Your digital space</div>
+    <h1>LAJUJU</h1>
+    <p>Everything you need, all in one place.</p>
 
-    <div class="embed-toggle">
-      <div>
-        <strong>Try playing inside LAJUJU</strong>
-        <p>If the official site permits embedding in your browser, this may work.</p>
-      </div>
-      <button class="secondary" id="toggle-embed" type="button">
-        Show embedded game
-      </button>
-    </div>
-
-    <div class="game-frame-wrap" id="frame-wrap">
-      <iframe
-        id="cookie-frame"
-        class="game-frame"
-        title="Official Cookie Clicker"
-        src="about:blank"
-        loading="lazy"
-        allow="fullscreen">
-      </iframe>
-    </div>
-
-    <p class="note">
-      If the embedded area shows a security error or stays blank, that is
-      controlled by the official website and cannot be fixed by changing
-      LAJUJU's HTML. Use the launch button above to play the original game.
-    </p>
+    <form class="search" id="searchForm">
+      <input id="searchInput" type="text"
+        placeholder="Search the web..." aria-label="Search the web">
+      <button type="submit">Search ↗</button>
+    </form>
   </section>
-</main>
 
-<footer>
-  LAJUJU · Your space on the web<br>
-  Cookie Clicker is created by Orteil and hosted on its official website.
-</footer>
+  <main>
+    <section id="apps">
+      <div class="section-heading">
+        <div>
+          <h2>Google Apps</h2>
+          <p>Official Google services with their real app icons.</p>
+        </div>
+      </div>
 
-<script>
-const BLACK_ICON =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E";
+      <div class="app-grid">
+        <a class="app-card" href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Classroom"
+            src="https://www.google.com/s2/favicons?domain=classroom.google.com&sz=128">
+          <div><div class="app-name">Classroom</div><div class="app-description">Classes and assignments</div></div>
+        </a>
 
-const presets = {
-  laj: {
-    label: "LAJUJU tab",
-    title: "LAJUJU",
-    icon: BLACK_ICON
-  },
-  docs: {
-    label: "Google Docs",
-    title: "Google Docs",
-    icon: "https://www.google.com/s2/favicons?domain=docs.google.com&sz=64"
-  },
-  slides: {
-    label: "Google Slides",
-    title: "Google Slides",
-    icon: "https://www.google.com/s2/favicons?domain=slides.google.com&sz=64"
-  },
-  classroom: {
-    label: "Classroom",
-    title: "Google Classroom",
-    icon: "https://www.google.com/s2/favicons?domain=classroom.google.com&sz=64"
-  },
-  drive: {
-    label: "Google Drive",
-    title: "Google Drive",
-    icon: "https://www.google.com/s2/favicons?domain=drive.google.com&sz=64"
-  },
-  calendar: {
-    label: "Calendar",
-    title: "Google Calendar",
-    icon: "https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64"
-  },
-  gmail: {
-    label: "Gmail",
-    title: "Gmail",
-    icon: "https://www.google.com/s2/favicons?domain=mail.google.com&sz=64"
-  },
-  blank: {
-    label: "Blank tab",
-    title: "New Tab",
-    icon: "https://www.google.com/s2/favicons?domain=example.com&sz=64"
-  }
-};
+        <a class="app-card" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Docs"
+            src="https://www.google.com/s2/favicons?domain=docs.google.com&sz=128">
+          <div><div class="app-name">Google Docs</div><div class="app-description">Documents</div></div>
+        </a>
 
-// Live local clock
-const clock = document.getElementById("clock");
+        <a class="app-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Drive"
+            src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=128">
+          <div><div class="app-name">Google Drive</div><div class="app-description">Cloud storage</div></div>
+        </a>
 
-function updateClock() {
-  clock.textContent = new Intl.DateTimeFormat(undefined, {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  }).format(new Date());
-}
+        <a class="app-card" href="https://slides.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Slides"
+            src="https://www.google.com/s2/favicons?domain=slides.google.com&sz=128">
+          <div><div class="app-name">Google Slides</div><div class="app-description">Presentations</div></div>
+        </a>
 
-updateClock();
-setInterval(updateClock, 1000);
+        <a class="app-card" href="https://sheets.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Sheets"
+            src="https://www.google.com/s2/favicons?domain=sheets.google.com&sz=128">
+          <div><div class="app-name">Google Sheets</div><div class="app-description">Spreadsheets</div></div>
+        </a>
 
-// Search
-document.getElementById("search-form").addEventListener("submit", event => {
-  event.preventDefault();
+        <a class="app-card" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Gmail"
+            src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=128">
+          <div><div class="app-name">Gmail</div><div class="app-description">Email</div></div>
+        </a>
 
-  const query = document.getElementById("search-input").value.trim();
-  if (!query) return;
+        <a class="app-card" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Calendar"
+            src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=128">
+          <div><div class="app-name">Calendar</div><div class="app-description">Events and schedules</div></div>
+        </a>
 
-  window.open(
-    "https://www.google.com/search?q=" + encodeURIComponent(query),
-    "_blank",
-    "noopener,noreferrer"
-  );
-});
+        <a class="app-card" href="https://meet.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Meet"
+            src="https://www.google.com/s2/favicons?domain=meet.google.com&sz=128">
+          <div><div class="app-name">Google Meet</div><div class="app-description">Video meetings</div></div>
+        </a>
 
-// Tab title and favicon menu
-const disguiseButton = document.getElementById("disguise-button");
-const disguiseMenu = document.getElementById("disguise-menu");
-const selectedIcon = document.getElementById("selected-icon");
-const selectedLabel = document.getElementById("selected-label");
-const tabIcon = document.getElementById("tab-icon");
+        <a class="app-card" href="https://forms.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Forms"
+            src="https://www.google.com/s2/favicons?domain=forms.google.com&sz=128">
+          <div><div class="app-name">Google Forms</div><div class="app-description">Forms and quizzes</div></div>
+        </a>
 
-function closeMenu() {
-  disguiseMenu.classList.remove("open");
-  disguiseButton.setAttribute("aria-expanded", "false");
-}
+        <a class="app-card" href="https://sites.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google Sites"
+            src="https://www.google.com/s2/favicons?domain=sites.google.com&sz=128">
+          <div><div class="app-name">Google Sites</div><div class="app-description">Create websites</div></div>
+        </a>
 
-disguiseButton.addEventListener("click", () => {
-  const opening = !disguiseMenu.classList.contains("open");
-  disguiseMenu.classList.toggle("open", opening);
-  disguiseButton.setAttribute("aria-expanded", String(opening));
-});
+        <a class="app-card" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="YouTube"
+            src="https://www.google.com/s2/favicons?domain=youtube.com&sz=128">
+          <div><div class="app-name">YouTube</div><div class="app-description">Videos</div></div>
+        </a>
 
-document.querySelectorAll(".disguise-option").forEach(button => {
-  button.addEventListener("click", () => {
-    const preset = presets[button.dataset.choice];
-    if (!preset) return;
+        <a class="app-card" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">
+          <img class="app-icon" alt="Google"
+            src="https://www.google.com/s2/favicons?domain=google.com&sz=128">
+          <div><div class="app-name">Google</div><div class="app-description">Search</div></div>
+        </a>
+      </div>
+    </section>
 
-    document.title = preset.title;
-    selectedLabel.textContent = preset.label;
-    selectedIcon.src = preset.icon;
-    tabIcon.href = preset.icon;
+    <section id="games">
+      <div class="section-heading">
+        <div>
+          <h2>Cookie Clicker</h2>
+          <p>The full game page, not a homemade clicker.</p>
+        </div>
+      </div>
 
-    document.querySelectorAll(".disguise-option").forEach(option => {
-      const selected = option === button;
-      option.setAttribute("aria-checked", String(selected));
-      option.querySelector(".check").textContent = selected ? "✓" : "";
+      <div class="game-panel">
+        <div class="game-header">
+          <div class="game-title">
+            <span class="cookie-emoji">🍪</span>
+            <div>
+              <h3>Cookie Clicker</h3>
+              <p>Original game experience hosted by the linked site</p>
+            </div>
+          </div>
+
+          <div class="game-buttons">
+            <a class="small-button"
+              href="https://stormyskitten.github.io/CookieClickerUnblocked/"
+              target="_blank" rel="noopener noreferrer">
+              Open in new tab ↗
+            </a>
+            <button class="small-button" id="reloadGame">Reload game</button>
+          </div>
+        </div>
+
+        <iframe
+          class="game-frame"
+          id="cookieFrame"
+          src="https://stormyskitten.github.io/CookieClickerUnblocked/"
+          title="Cookie Clicker game"
+          loading="lazy"
+          allow="autoplay; fullscreen"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+
+        <div class="game-note">
+          If the game does not load inside this panel, use “Open in new tab.”
+          The hosting website controls whether its game can be embedded here.
+          Game credited to Orteil; LAJUJU is not the game's creator.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    LAJUJU · Made for the web
+  </footer>
+
+  <script>
+    // Live clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById("clock").textContent =
+        now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
+        });
+    }
+
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // Web search
+    document.getElementById("searchForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      const query = document.getElementById("searchInput").value.trim();
+      if (!query) return;
+      window.open(
+        "https://www.google.com/search?q=" + encodeURIComponent(query),
+        "_blank",
+        "noopener,noreferrer"
+      );
     });
 
-    closeMenu();
-  });
-});
+    // Tab appearance menu
+    const menuButton = document.getElementById("menuButton");
+    const tabMenu = document.getElementById("tabMenu");
+    const defaultTitle = "LAJUJU";
+    const defaultIcon =
+      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E";
 
-document.addEventListener("click", event => {
-  if (!event.target.closest(".disguise")) closeMenu();
-});
+    function setTabIcon(url) {
+      let favicon = document.querySelector('link[rel="icon"]');
+      if (!favicon) {
+        favicon = document.createElement("link");
+        favicon.rel = "icon";
+        document.head.appendChild(favicon);
+      }
+      favicon.href = url;
+    }
 
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closeMenu();
-});
+    menuButton.addEventListener("click", function () {
+      const open = tabMenu.classList.toggle("open");
+      menuButton.setAttribute("aria-expanded", String(open));
+    });
 
-// Optional embedded game. The official site may block this.
-const toggleEmbed = document.getElementById("toggle-embed");
-const frameWrap = document.getElementById("frame-wrap");
-const cookieFrame = document.getElementById("cookie-frame");
-let frameLoaded = false;
+    tabMenu.querySelectorAll("button[data-title]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.title = button.dataset.title;
+        setTabIcon(
+          "https://www.google.com/s2/favicons?domain=" +
+          encodeURIComponent(button.dataset.icon) + "&sz=64"
+        );
+        tabMenu.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      });
+    });
 
-toggleEmbed.addEventListener("click", () => {
-  const showing = frameWrap.classList.toggle("visible");
+    document.getElementById("resetTab").addEventListener("click", function () {
+      document.title = defaultTitle;
+      setTabIcon(defaultIcon);
+      tabMenu.classList.remove("open");
+      menuButton.setAttribute("aria-expanded", "false");
+    });
 
-  toggleEmbed.textContent = showing
-    ? "Hide embedded game"
-    : "Show embedded game";
+    document.addEventListener("click", function (event) {
+      if (!event.target.closest(".menu-wrap")) {
+        tabMenu.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+      }
+    });
 
-  if (showing && !frameLoaded) {
-    cookieFrame.src = "https://orteil.dashnet.org/cookieclicker/";
-    frameLoaded = true;
-  }
-});
-</script>
+    // Reload the embedded game
+    document.getElementById("reloadGame").addEventListener("click", function () {
+      const frame = document.getElementById("cookieFrame");
+      frame.src = "https://stormyskitten.github.io/CookieClickerUnblocked/";
+    });
+  </script>
 </body>
 </html>
