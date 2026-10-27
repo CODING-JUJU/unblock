@@ -3,20 +3,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080713">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0d16">
 <title>LAJUJU</title>
-<link id="tabIcon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000000'/%3E%3C/svg%3E">
+
+<link id="tabIcon" rel="icon"
+href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E">
 
 <style>
 :root {
-  --bg: #080713;
-  --panel: rgba(18, 17, 40, .76);
-  --text: #f8f7ff;
-  --muted: #a5a1c7;
-  --cyan: #41f6ff;
-  --pink: #ff3fd5;
-  --purple: #9360ff;
+  --bg: #0b0d16;
+  --panel: rgba(20, 23, 38, .78);
+  --border: rgba(177, 187, 225, .12);
+  --text: #f2f4ff;
+  --muted: #999fb8;
+  --blue: #8daeff;
+  --cyan: #8de8ef;
+  --purple: #b5a0ff;
 }
 
 * {
@@ -32,207 +35,121 @@ body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
-  background: var(--bg);
   color: var(--text);
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  font-family: Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
 }
 
-/* =========================
-   FLASHY ANIMATED BACKGROUND
-   ========================= */
+/* Calm, slowly moving background */
 
 .background {
   position: fixed;
   inset: 0;
+  z-index: -2;
   overflow: hidden;
   pointer-events: none;
-  z-index: -5;
   background:
-    radial-gradient(ellipse at 50% 0%, #261052 0%, transparent 52%),
-    radial-gradient(ellipse at 0% 70%, #071e40 0%, transparent 48%),
-    radial-gradient(ellipse at 100% 80%, #3b0737 0%, transparent 45%),
-    #080713;
+    radial-gradient(ellipse at 50% -20%, #242747 0%, transparent 60%),
+    #0b0d16;
 }
 
-.color-cloud {
+.glow {
   position: absolute;
-  width: 65vw;
-  height: 65vw;
-  min-width: 440px;
-  min-height: 440px;
+  width: 55vw;
+  height: 55vw;
+  min-width: 350px;
+  min-height: 350px;
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: .25;
-  mix-blend-mode: screen;
-  animation: cloudTravel 19s ease-in-out infinite alternate;
-}
-
-.cloud-one {
-  background: #6c26ff;
-  top: -35%;
-  left: -20%;
-}
-
-.cloud-two {
-  background: #ff20bf;
-  right: -25%;
-  top: 5%;
-  animation-delay: -7s;
-  animation-duration: 23s;
-}
-
-.cloud-three {
-  background: #00bfff;
-  bottom: -50%;
-  left: 15%;
-  animation-delay: -12s;
-  animation-duration: 27s;
-}
-
-@keyframes cloudTravel {
-  0% {
-    transform: translate3d(-4%, -3%, 0) scale(.85) rotate(0deg);
-  }
-  50% {
-    transform: translate3d(13%, 12%, 0) scale(1.15) rotate(90deg);
-  }
-  100% {
-    transform: translate3d(-8%, 7%, 0) scale(1) rotate(180deg);
-  }
-}
-
-.grid-floor {
-  position: absolute;
-  left: -50%;
-  top: 35%;
-  width: 200%;
-  height: 100%;
+  filter: blur(95px);
   opacity: .19;
-  background-image:
-    linear-gradient(rgba(111, 90, 255, .45) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(111, 90, 255, .45) 1px, transparent 1px);
-  background-size: 48px 48px;
-  transform: perspective(440px) rotateX(62deg);
-  transform-origin: top center;
-  mask-image: linear-gradient(to bottom, transparent, black 15%, black 65%, transparent);
-  animation: gridMove 5s linear infinite;
+  will-change: transform;
 }
 
-@keyframes gridMove {
-  from { background-position: 0 0; }
-  to { background-position: 0 48px; }
+.glow-one {
+  background: #6557bd;
+  top: -25%;
+  left: -20%;
+  animation: driftOne 32s ease-in-out infinite alternate;
 }
 
-.aurora {
-  position: absolute;
-  inset: -50%;
-  opacity: .16;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    #743bff 45deg,
-    transparent 90deg,
-    #00f0ff 150deg,
-    transparent 205deg,
-    #ff30d0 275deg,
-    transparent 330deg
-  );
-  filter: blur(100px);
-  animation: auroraSpin 42s linear infinite;
+.glow-two {
+  background: #286f91;
+  right: -25%;
+  top: 10%;
+  animation: driftTwo 38s ease-in-out infinite alternate;
 }
 
-@keyframes auroraSpin {
-  to { transform: rotate(360deg); }
+.glow-three {
+  background: #65438e;
+  left: 15%;
+  bottom: -45%;
+  animation: driftThree 42s ease-in-out infinite alternate;
 }
 
-.stars {
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 10% 20%, white 80%, transparent),
-    radial-gradient(2px 2px at 25% 75%, #9afaff 80%, transparent),
-    radial-gradient(1px 1px at 44% 35%, white 80%, transparent),
-    radial-gradient(2px 2px at 67% 15%, #ff9df0 80%, transparent),
-    radial-gradient(1px 1px at 83% 64%, white 80%, transparent),
-    radial-gradient(2px 2px at 92% 30%, #8fbdff 80%, transparent),
-    radial-gradient(1px 1px at 53% 90%, white 80%, transparent);
-  background-size: 430px 360px;
-  animation: starsDrift 70s linear infinite, starsBlink 4s ease-in-out infinite alternate;
+@keyframes driftOne {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to { transform: translate3d(12vw, 8vh, 0) scale(1.12); }
 }
 
-@keyframes starsDrift {
-  from { transform: translateY(0); }
-  to { transform: translateY(-360px); }
+@keyframes driftTwo {
+  from { transform: translate3d(0, 0, 0) scale(1.05); }
+  to { transform: translate3d(-10vw, 12vh, 0) scale(.94); }
 }
 
-@keyframes starsBlink {
-  from { opacity: .35; }
-  to { opacity: .95; }
+@keyframes driftThree {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(8vw, -10vh, 0); }
 }
 
-.scanlines {
+.grid {
   position: absolute;
   inset: 0;
   opacity: .055;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0px,
-    transparent 3px,
-    rgba(255,255,255,.35) 4px
-  );
+  background-image:
+    linear-gradient(rgba(160, 174, 255, .3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160, 174, 255, .3) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, transparent, black 30%, transparent);
 }
 
-.flash {
+.noise {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  background: radial-gradient(ellipse at center, rgba(110, 68, 255, .3), transparent 70%);
-  animation: ambientFlash 9s ease-in-out infinite;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 }
 
-@keyframes ambientFlash {
-  0%, 100% { opacity: 0; }
-  8% { opacity: .7; }
-  10% { opacity: .05; }
-  48% { opacity: 0; }
-  50% { opacity: .45; }
-  52% { opacity: 0; }
-}
-
-/* =========================
-   TOP BAR
-   ========================= */
+/* Header */
 
 .topbar {
-  width: min(1180px, calc(100% - 36px));
+  width: min(1120px, calc(100% - 36px));
   margin: 22px auto 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  position: relative;
-  z-index: 5;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 15px;
-  font-weight: 900;
+  font-size: 14px;
+  font-weight: 850;
   letter-spacing: 2px;
 }
 
 .brand-mark {
   width: 32px;
   height: 32px;
-  border-radius: 10px;
   display: grid;
   place-items: center;
-  color: white;
-  background: linear-gradient(135deg, #9c5dff, #ff38c8 55%, #35eaff);
-  box-shadow: 0 0 22px rgba(162, 73, 255, .45);
+  border-radius: 10px;
+  background: linear-gradient(145deg, #a9a4ff, #72cbdc);
+  color: #101322;
+  font-size: 16px;
+  box-shadow: 0 3px 18px rgba(125, 155, 255, .14);
 }
 
 .top-actions {
@@ -241,15 +158,20 @@ body {
   gap: 10px;
 }
 
-.clock {
-  padding: 10px 14px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(13, 12, 31, .65);
-  border-radius: 12px;
-  color: #d9d5ff;
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
+.clock,
+.select-wrap select {
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: rgba(17, 20, 34, .8);
+  color: #d9def4;
+  font: inherit;
+  font-size: 12px;
   backdrop-filter: blur(12px);
+}
+
+.clock {
+  padding: 10px 13px;
+  font-variant-numeric: tabular-nums;
 }
 
 .select-wrap {
@@ -258,13 +180,7 @@ body {
 
 .select-wrap select {
   appearance: none;
-  color: white;
-  background: rgba(19, 17, 42, .85);
-  border: 1px solid rgba(177, 151, 255, .28);
-  padding: 11px 32px 11px 13px;
-  border-radius: 12px;
-  font: inherit;
-  font-size: 12px;
+  padding: 10px 30px 10px 12px;
   cursor: pointer;
   outline: none;
 }
@@ -272,336 +188,290 @@ body {
 .select-wrap::after {
   content: "⌄";
   position: absolute;
-  right: 12px;
+  right: 11px;
   top: 7px;
   pointer-events: none;
-  color: #c8b7ff;
+  color: #aeb6d5;
 }
 
 select option {
-  background: #17132b;
+  background: #151827;
   color: white;
 }
 
-/* =========================
-   MAIN HERO
-   ========================= */
+/* Main */
 
 main {
-  width: min(1080px, calc(100% - 36px));
+  width: min(1050px, calc(100% - 36px));
   margin: 0 auto;
 }
 
 .hero {
+  padding: 86px 0 62px;
   text-align: center;
-  padding: 85px 0 56px;
-  position: relative;
 }
 
 .hero-pill {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  border: 1px solid rgba(154, 111, 255, .38);
-  background: rgba(104, 57, 191, .12);
-  color: #e1d4ff;
-  padding: 9px 15px;
-  border-radius: 99px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 2.4px;
-  box-shadow: 0 0 30px rgba(145, 83, 255, .12);
+  padding: 9px 14px;
+  border: 1px solid rgba(176, 169, 255, .2);
+  border-radius: 30px;
+  background: rgba(104, 101, 163, .09);
+  color: #c6c7ee;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 2px;
 }
 
 .status-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #5dffcf;
-  box-shadow: 0 0 12px #5dffcf;
-  animation: dotPulse 1.6s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-  50% { opacity: .35; transform: scale(.75); }
+  background: #8be4c2;
+  box-shadow: 0 0 8px rgba(139, 228, 194, .35);
 }
 
 h1 {
-  margin: 20px 0 28px;
-  font-size: clamp(66px, 12vw, 128px);
-  font-weight: 1000;
-  letter-spacing: clamp(-8px, -1vw, -2px);
-  line-height: .98;
-  position: relative;
+  margin: 23px 0 29px;
+  font-size: clamp(68px, 11vw, 120px);
+  font-weight: 950;
+  letter-spacing: -.075em;
+  line-height: 1;
   color: transparent;
-  background: linear-gradient(
-    100deg,
-    #ffffff 0%,
-    #b7a0ff 20%,
-    #ff6cde 43%,
-    #77f8ff 66%,
-    #ffffff 82%,
-    #a891ff 100%
-  );
-  background-size: 250% auto;
+  background: linear-gradient(110deg, #f7f7ff 15%, #b8b4ff 52%, #8fe0e9 85%);
   background-clip: text;
   -webkit-background-clip: text;
-  filter: drop-shadow(0 0 25px rgba(157, 87, 255, .24));
-  animation: titleShine 7s linear infinite, titleFloat 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 22px rgba(151, 148, 255, .09));
+  animation: titleFade 8s ease-in-out infinite alternate;
 }
 
-@keyframes titleShine {
-  to { background-position: 250% center; }
+@keyframes titleFade {
+  from { filter: drop-shadow(0 0 14px rgba(151, 148, 255, .07)); }
+  to { filter: drop-shadow(0 0 25px rgba(143, 224, 233, .17)); }
 }
 
-@keyframes titleFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
+/* Search */
 
 .search-form {
-  display: flex;
-  width: min(640px, 100%);
+  width: min(620px, 100%);
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 7px;
-  border-radius: 18px;
-  background: rgba(14, 12, 32, .84);
-  border: 1px solid rgba(161, 128, 255, .35);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.025) inset,
-    0 10px 50px rgba(0,0,0,.28),
-    0 0 35px rgba(131, 72, 255, .12);
-  transition: border-color .3s, box-shadow .3s, transform .3s;
-  backdrop-filter: blur(20px);
+  border: 1px solid rgba(176, 185, 230, .17);
+  border-radius: 15px;
+  background: rgba(17, 20, 34, .84);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .12);
+  transition: border-color .28s ease, box-shadow .28s ease;
+  backdrop-filter: blur(15px);
 }
 
 .search-form:focus-within {
-  border-color: rgba(79, 239, 255, .85);
-  box-shadow:
-    0 0 0 1px rgba(69, 242, 255, .1) inset,
-    0 0 32px rgba(48, 213, 255, .18),
-    0 0 75px rgba(150, 61, 255, .13);
-  transform: translateY(-2px);
+  border-color: rgba(144, 195, 230, .55);
+  box-shadow: 0 0 0 3px rgba(120, 165, 220, .06);
 }
 
 .search-icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  color: #aaa3d8;
-  font-size: 21px;
+  width: 39px;
   flex-shrink: 0;
+  color: #aab3d0;
+  font-size: 23px;
 }
 
 .search-form input {
+  flex: 1;
   width: 100%;
   min-width: 0;
-  background: transparent;
-  color: white;
   border: 0;
   outline: 0;
-  font-size: 15px;
-  padding: 12px 5px;
+  background: transparent;
+  color: white;
+  font: inherit;
+  font-size: 14px;
+  padding: 12px 3px;
 }
 
 .search-form input::placeholder {
-  color: #77718f;
+  color: #8188a2;
 }
 
 .search-form button {
+  padding: 12px 19px;
   border: 0;
-  border-radius: 12px;
-  padding: 0 23px;
-  color: #090817;
-  font-size: 13px;
-  font-weight: 900;
+  border-radius: 10px;
+  background: #c0c3ff;
+  color: #15172b;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 850;
   cursor: pointer;
-  background: linear-gradient(120deg, #9d8aff, #6cf6ff);
-  box-shadow: 0 0 20px rgba(89, 231, 255, .2);
-  transition: transform .2s, box-shadow .2s;
+  transition: background .2s ease, transform .2s ease;
 }
 
 .search-form button:hover {
-  transform: scale(1.035);
-  box-shadow: 0 0 30px rgba(89, 231, 255, .4);
+  background: #d7d8ff;
+  transform: translateY(-1px);
 }
 
-/* =========================
-   SECTION HEADERS
-   ========================= */
+/* Section headings */
 
 .section {
-  margin: 0 auto 50px;
+  margin-bottom: 48px;
 }
 
 .section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
   margin-bottom: 17px;
 }
 
 .section-heading h2 {
-  font-size: 16px;
   margin: 0;
-  letter-spacing: .3px;
-  font-weight: 850;
+  font-size: 16px;
+  font-weight: 800;
 }
 
 .section-heading span {
-  font-size: 11px;
-  color: #9d96c2;
-  letter-spacing: 1.6px;
+  color: #858da9;
+  font-size: 10px;
   font-weight: 700;
+  letter-spacing: 1.5px;
 }
 
-/* =========================
-   APP CARDS
-   ========================= */
+/* App cards */
 
 .app-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  gap: 13px;
 }
 
 .app-card {
+  min-width: 0;
   position: relative;
-  overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 13px;
-  min-width: 0;
-  padding: 17px;
+  gap: 12px;
+  padding: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(25, 29, 47, .86), rgba(17, 20, 33, .86));
+  color: var(--text);
   text-decoration: none;
-  color: white;
-  border-radius: 17px;
-  background: linear-gradient(135deg, rgba(28, 24, 57, .86), rgba(13, 12, 31, .88));
-  border: 1px solid rgba(169, 150, 255, .14);
-  box-shadow: 0 8px 25px rgba(0,0,0,.1);
-  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
-  isolation: isolate;
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    background .25s ease;
 }
 
 .app-card::before {
   content: "";
   position: absolute;
-  inset: -1px;
-  z-index: -1;
+  inset: 0;
   opacity: 0;
-  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
-    rgba(117, 89, 255, .25), transparent 65%);
-  transition: opacity .3s;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--mx, 50%) var(--my, 50%),
+    rgba(148, 165, 255, .09),
+    transparent 70%
+  );
+  transition: opacity .25s ease;
 }
 
 .app-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(118, 232, 255, .48);
-  box-shadow: 0 12px 34px rgba(0,0,0,.25), 0 0 23px rgba(106, 94, 255, .13);
+  transform: translateY(-3px);
+  border-color: rgba(165, 185, 239, .32);
+  background: rgba(29, 34, 53, .95);
 }
 
 .app-card:hover::before {
   opacity: 1;
 }
 
-.app-card img {
-  width: 35px;
-  height: 35px;
+.app-icon {
+  width: 34px;
+  height: 34px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: drop-shadow(0 0 8px rgba(255,255,255,.08));
-  transition: transform .3s;
+  position: relative;
+  z-index: 1;
+  transition: transform .25s ease;
 }
 
-.app-card:hover img {
-  transform: scale(1.12) rotate(-3deg);
+.app-card:hover .app-icon {
+  transform: scale(1.05);
 }
 
 .app-name {
+  position: relative;
+  z-index: 1;
   min-width: 0;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 750;
   overflow-wrap: anywhere;
 }
 
 .app-arrow {
   margin-left: auto;
-  color: #8e86b6;
-  font-size: 16px;
-  transition: transform .25s, color .25s;
+  color: #858da9;
+  font-size: 15px;
+  transition: color .2s ease, transform .2s ease;
 }
 
 .app-card:hover .app-arrow {
-  transform: translate(3px, -3px);
-  color: var(--cyan);
+  color: #b6c7ff;
+  transform: translate(2px, -2px);
 }
 
-/* =========================
-   GAME CARDS
-   ========================= */
+/* Games */
 
 .game-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
+  gap: 15px;
 }
 
 .game-card {
   min-width: 0;
-  position: relative;
-  overflow: hidden;
-  padding: 23px;
-  border-radius: 20px;
-  border: 1px solid rgba(177, 145, 255, .24);
-  background: linear-gradient(135deg, rgba(42, 24, 77, .7), rgba(15, 13, 33, .92));
-  box-shadow: 0 12px 35px rgba(0,0,0,.14);
-  transition: transform .3s, border-color .3s, box-shadow .3s;
-}
-
-.game-card::after {
-  content: "";
-  position: absolute;
-  width: 170px;
-  height: 170px;
-  right: -65px;
-  top: -85px;
-  border-radius: 50%;
-  background: #8b46ff;
-  filter: blur(70px);
-  opacity: .35;
-  pointer-events: none;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  background: linear-gradient(135deg, rgba(28, 30, 51, .88), rgba(17, 19, 32, .91));
+  transition: transform .25s ease, border-color .25s ease;
 }
 
 .game-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(99, 241, 255, .5);
-  box-shadow: 0 15px 40px rgba(0,0,0,.2), 0 0 30px rgba(129, 70, 255, .12);
+  transform: translateY(-3px);
+  border-color: rgba(165, 185, 239, .3);
 }
 
 .game-top {
   display: flex;
   align-items: center;
-  gap: 14px;
-  position: relative;
-  z-index: 1;
+  gap: 13px;
 }
 
 .game-emoji {
+  width: 47px;
+  height: 47px;
   display: grid;
   place-items: center;
-  width: 49px;
-  height: 49px;
   flex-shrink: 0;
-  border-radius: 15px;
-  font-size: 25px;
-  background: rgba(147, 96, 255, .17);
-  border: 1px solid rgba(180, 146, 255, .25);
+  border: 1px solid rgba(177, 187, 225, .14);
+  border-radius: 13px;
+  background: rgba(150, 157, 230, .09);
+  font-size: 24px;
 }
 
 .game-card h3 {
   margin: 0 0 5px;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .game-card p {
@@ -615,228 +485,113 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 9px;
-  margin-top: 20px;
-  position: relative;
-  z-index: 1;
+  margin-top: 19px;
 }
 
 .game-button {
   display: inline-flex;
-  align-items: center;
   justify-content: center;
-  text-align: center;
+  align-items: center;
+  padding: 11px 13px;
+  border: 1px solid rgba(177, 187, 225, .16);
+  border-radius: 10px;
+  background: rgba(120, 129, 180, .09);
+  color: #dfe3fa;
   text-decoration: none;
-  padding: 11px 14px;
-  border-radius: 11px;
-  font-size: 12px;
-  font-weight: 850;
-  color: white;
-  background: rgba(147, 96, 255, .2);
-  border: 1px solid rgba(178, 146, 255, .3);
-  transition: transform .2s, background .2s, box-shadow .2s;
+  font-size: 11px;
+  font-weight: 800;
+  transition: background .2s ease, transform .2s ease;
 }
 
 .game-button.primary {
-  color: #0b0920;
-  background: linear-gradient(115deg, #ad91ff, #69f4ff);
-  border: 0;
+  border-color: transparent;
+  background: #c0c3ff;
+  color: #15172b;
 }
 
 .game-button:hover {
   transform: translateY(-2px);
-  background: rgba(147, 96, 255, .35);
-  box-shadow: 0 0 22px rgba(135, 98, 255, .15);
+  background: rgba(140, 153, 205, .17);
 }
 
 .game-button.primary:hover {
-  background: linear-gradient(115deg, #d1c1ff, #a2fbff);
+  background: #d7d8ff;
 }
 
-/* =========================
-   FOOTER
-   ========================= */
+/* Footer */
 
 footer {
+  padding: 22px 16px 34px;
   text-align: center;
-  padding: 25px 18px 35px;
-  color: #827caa;
-  font-size: 11px;
+  color: #858ba4;
+  font-size: 10px;
+  font-weight: 800;
   letter-spacing: 4px;
-  font-weight: 850;
 }
 
-/* =========================
-   EPIC CLICK RIPPLE EFFECTS
-   ========================= */
+/* Smooth click ripples */
 
 .ripple-layer {
   position: fixed;
   inset: 0;
+  overflow: hidden;
   z-index: 9999;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .ripple {
   position: absolute;
   left: 0;
   top: 0;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid rgba(158, 200, 255, .8);
   border-radius: 50%;
-  transform: translate(-50%, -50%) scale(.1);
-  border: 2px solid #65f7ff;
-  box-shadow:
-    0 0 10px #50f4ff,
-    inset 0 0 10px rgba(80, 244, 255, .5);
-  animation: rippleBlast 1.05s cubic-bezier(.12,.6,.18,1) forwards;
+  transform: translate(-50%, -50%) scale(.2);
+  opacity: 0;
+  animation: rippleExpand .85s cubic-bezier(.15, .55, .35, 1) forwards;
 }
 
-.ripple.ring-two {
-  border-color: #c17bff;
-  box-shadow:
-    0 0 12px #a766ff,
-    inset 0 0 10px rgba(190, 120, 255, .5);
-  animation-delay: .07s;
-  animation-duration: 1.2s;
+.ripple.secondary {
+  border-color: rgba(192, 176, 255, .55);
+  animation-delay: .12s;
+  animation-duration: 1s;
 }
 
-.ripple.ring-three {
-  border-color: #ff70df;
-  box-shadow: 0 0 12px #ff49d6;
-  animation-delay: .14s;
-  animation-duration: 1.3s;
-}
-
-@keyframes rippleBlast {
+@keyframes rippleExpand {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(.1);
+    transform: translate(-50%, -50%) scale(.2);
   }
-  10% { opacity: 1; }
-  65% { opacity: .65; }
+  12% { opacity: .72; }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(7);
+    transform: translate(-50%, -50%) scale(5.5);
   }
 }
 
-.shockwave {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,.95);
-  transform: translate(-50%, -50%);
-  animation: shockwaveOut .72s ease-out forwards;
-  box-shadow: 0 0 15px white, 0 0 30px #55eaff;
-}
+/* Reduced-motion preference */
 
-@keyframes shockwaveOut {
-  0% {
-    opacity: .95;
-    width: 9px;
-    height: 9px;
-    border-width: 2px;
-  }
-  100% {
-    opacity: 0;
-    width: 155px;
-    height: 155px;
-    border-width: 0;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
   }
 }
 
-.spark {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--spark-color, #fff);
-  box-shadow: 0 0 7px 2px var(--spark-color, #fff);
-  animation: sparkFly .75s cubic-bezier(.12,.65,.25,1) forwards;
-}
+/* Mobile */
 
-@keyframes sparkFly {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.4);
-  }
-  100% {
-    opacity: 0;
-    transform:
-      translate(
-        calc(-50% + var(--dx)),
-        calc(-50% + var(--dy))
-      ) scale(0);
-  }
-}
-
-.click-flash {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 180px;
-  height: 180px;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle,
-    rgba(255,255,255,.25) 0%,
-    rgba(95,220,255,.13) 20%,
-    rgba(156,74,255,.08) 42%,
-    transparent 72%);
-  animation: flashPop .48s ease-out forwards;
-}
-
-@keyframes flashPop {
-  from { opacity: 1; scale: .25; }
-  to { opacity: 0; scale: 1.5; }
-}
-
-/* =========================
-   FLOATING LIGHTS
-   ========================= */
-
-.floating-light {
-  position: fixed;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #a7faff;
-  box-shadow: 0 0 9px 2px rgba(82, 239, 255, .55);
-  pointer-events: none;
-  z-index: -1;
-  animation: floatUp linear infinite;
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(30px) translateX(0);
-    opacity: 0;
-  }
-  15% { opacity: .8; }
-  85% { opacity: .45; }
-  100% {
-    transform: translateY(-105vh) translateX(70px);
-    opacity: 0;
-  }
-}
-
-/* =========================
-   RESPONSIVE LAYOUT
-   ========================= */
-
-@media (max-width: 850px) {
+@media (max-width: 800px) {
   .app-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero {
-    padding-top: 65px;
+    padding-top: 68px;
   }
 }
 
@@ -869,7 +624,7 @@ footer {
   }
 
   .select-wrap select {
-    padding: 8px 28px 8px 10px;
+    padding: 8px 27px 8px 10px;
     font-size: 11px;
   }
 
@@ -878,26 +633,24 @@ footer {
   }
 
   .hero {
-    padding: 64px 0 45px;
+    padding: 65px 0 45px;
   }
 
   h1 {
-    font-size: clamp(57px, 16vw, 82px);
-    margin-top: 23px;
+    font-size: clamp(60px, 16vw, 82px);
   }
 
   .hero-pill {
     font-size: 9px;
-    letter-spacing: 1.7px;
   }
 
   .search-form input {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .search-form button {
-    padding: 0 15px;
-    font-size: 12px;
+    padding: 12px;
+    font-size: 11px;
   }
 
   .app-grid {
@@ -905,12 +658,11 @@ footer {
   }
 
   .app-card {
-    padding: 13px 10px;
     gap: 9px;
-    border-radius: 13px;
+    padding: 12px 10px;
   }
 
-  .app-card img {
+  .app-icon {
     width: 29px;
     height: 29px;
   }
@@ -930,24 +682,6 @@ footer {
   .game-card {
     padding: 18px;
   }
-
-  .section-heading h2 {
-    font-size: 14px;
-  }
-
-  .section-heading span {
-    font-size: 9px;
-  }
-}
-
-/* Respect reduced-motion accessibility settings */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-  }
 }
 </style>
 </head>
@@ -955,17 +689,13 @@ footer {
 <body>
 
 <div class="background" aria-hidden="true">
-  <div class="color-cloud cloud-one"></div>
-  <div class="color-cloud cloud-two"></div>
-  <div class="color-cloud cloud-three"></div>
-  <div class="aurora"></div>
-  <div class="grid-floor"></div>
-  <div class="stars"></div>
-  <div class="scanlines"></div>
-  <div class="flash"></div>
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
+  <div class="glow glow-three"></div>
+  <div class="grid"></div>
+  <div class="noise"></div>
 </div>
 
-<div id="floatingLights" aria-hidden="true"></div>
 <div class="ripple-layer" id="rippleLayer" aria-hidden="true"></div>
 
 <header class="topbar">
@@ -1000,7 +730,7 @@ footer {
     <h1>LAJUJU</h1>
 
     <form class="search-form" id="searchForm">
-      <div class="search-icon">⌕</div>
+      <div class="search-icon" aria-hidden="true">⌕</div>
       <input
         id="searchInput"
         type="text"
@@ -1020,75 +750,63 @@ footer {
 
     <div class="app-grid">
       <a class="app-card" href="https://classroom.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/classroom_48dp.png" alt="">
-        <span class="app-name">Classroom</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/classroom_48dp.png" data-fallback="📚" alt="Google Classroom">
+        <span class="app-name">Classroom</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://docs.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png" alt="">
-        <span class="app-name">Docs</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png" data-fallback="📄" alt="Google Docs">
+        <span class="app-name">Docs</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://drive.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png" alt="">
-        <span class="app-name">Drive</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png" data-fallback="📁" alt="Google Drive">
+        <span class="app-name">Drive</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/calendar_2020q4_48dp.png" alt="">
-        <span class="app-name">Calendar</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/calendar_2020q4_48dp.png" data-fallback="📅" alt="Google Calendar">
+        <span class="app-name">Calendar</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://mail.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/gmail_2020q4_48dp.png" alt="">
-        <span class="app-name">Gmail</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/gmail_2020q4_48dp.png" data-fallback="✉️" alt="Gmail">
+        <span class="app-name">Gmail</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://sheets.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png" alt="">
-        <span class="app-name">Sheets</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/sheets_2020q4_48dp.png" data-fallback="📊" alt="Google Sheets">
+        <span class="app-name">Sheets</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://slides.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/slides_2020q4_48dp.png" alt="">
-        <span class="app-name">Slides</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/slides_2020q4_48dp.png" data-fallback="📽️" alt="Google Slides">
+        <span class="app-name">Slides</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://meet.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/meet_2020q4_48dp.png" alt="">
-        <span class="app-name">Google Meet</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/meet_2020q4_48dp.png" data-fallback="📹" alt="Google Meet">
+        <span class="app-name">Google Meet</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://forms.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/forms_2020q4_48dp.png" alt="">
-        <span class="app-name">Forms</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/forms_2020q4_48dp.png" data-fallback="📋" alt="Google Forms">
+        <span class="app-name">Forms</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://sites.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/sites_2020q4_48dp.png" alt="">
-        <span class="app-name">Google Sites</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/sites_2020q4_48dp.png" data-fallback="🌐" alt="Google Sites">
+        <span class="app-name">Google Sites</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/youtube_48dp.png" alt="">
-        <span class="app-name">YouTube</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/youtube_48dp.png" data-fallback="▶️" alt="YouTube">
+        <span class="app-name">YouTube</span><span class="app-arrow">↗</span>
       </a>
 
       <a class="app-card" href="https://www.google.com/" target="_blank" rel="noopener noreferrer">
-        <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="">
-        <span class="app-name">Google</span>
-        <span class="app-arrow">↗</span>
+        <img class="app-icon" src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" data-fallback="🔎" alt="Google">
+        <span class="app-name">Google</span><span class="app-arrow">↗</span>
       </a>
     </div>
   </section>
@@ -1110,19 +828,12 @@ footer {
         </div>
 
         <div class="game-buttons">
-          <a
-            class="game-button primary"
-            href="https://orteil.dashnet.org/cookieclicker/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Play Official Version ↗</a>
-
-          <a
-            class="game-button"
-            href="https://stormyskitten.github.io/CookieClickerUnblocked/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Alternative Version ↗</a>
+          <a class="game-button primary" href="https://orteil.dashnet.org/cookieclicker/" target="_blank" rel="noopener noreferrer">
+            Play Official Version ↗
+          </a>
+          <a class="game-button" href="https://stormyskitten.github.io/CookieClickerUnblocked/" target="_blank" rel="noopener noreferrer">
+            Alternative Version ↗
+          </a>
         </div>
       </article>
 
@@ -1131,24 +842,17 @@ footer {
           <div class="game-emoji">🎮</div>
           <div>
             <h3>More Games</h3>
-            <p>Open a game collection in a new tab.</p>
+            <p>Explore games in a new tab.</p>
           </div>
         </div>
 
         <div class="game-buttons">
-          <a
-            class="game-button primary"
-            href="https://poki.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Explore Games ↗</a>
-
-          <a
-            class="game-button"
-            href="https://itch.io/games"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Discover Indie Games ↗</a>
+          <a class="game-button primary" href="https://poki.com/" target="_blank" rel="noopener noreferrer">
+            Explore Games ↗
+          </a>
+          <a class="game-button" href="https://itch.io/games" target="_blank" rel="noopener noreferrer">
+            Indie Games ↗
+          </a>
         </div>
       </article>
     </div>
@@ -1158,27 +862,22 @@ footer {
 <footer>LAJUJU</footer>
 
 <script>
-/* =========================
-   LIVE CLOCK
-   ========================= */
+/* Live clock */
 
 function updateClock() {
-  const clock = document.getElementById("clock");
-
-  clock.textContent = new Date().toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
 }
 
 updateClock();
 setInterval(updateClock, 1000);
 
 
-/* =========================
-   SEARCH
-   ========================= */
+/* Search */
 
 document.getElementById("searchForm").addEventListener("submit", function(event) {
   event.preventDefault();
@@ -1198,36 +897,29 @@ document.getElementById("searchForm").addEventListener("submit", function(event)
 });
 
 
-/* =========================
-   BROWSER TAB APPEARANCE
-   ========================= */
+/* Tab title and favicon */
 
 const tabModes = {
   default: {
     title: "LAJUJU",
-    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23000000'/%3E%3C/svg%3E"
+    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000000'/%3E%3C/svg%3E"
   },
-
   classroom: {
     title: "Google Classroom",
     icon: "https://www.gstatic.com/images/branding/product/2x/classroom_48dp.png"
   },
-
   docs: {
     title: "Google Docs",
     icon: "https://www.gstatic.com/images/branding/product/2x/docs_2020q4_48dp.png"
   },
-
   drive: {
     title: "Google Drive",
     icon: "https://www.gstatic.com/images/branding/product/2x/drive_2020q4_48dp.png"
   },
-
   calendar: {
     title: "Google Calendar",
     icon: "https://www.gstatic.com/images/branding/product/2x/calendar_2020q4_48dp.png"
   },
-
   gmail: {
     title: "Gmail",
     icon: "https://www.gstatic.com/images/branding/product/2x/gmail_2020q4_48dp.png"
@@ -1236,102 +928,57 @@ const tabModes = {
 
 document.getElementById("tabMode").addEventListener("change", function() {
   const selected = tabModes[this.value] || tabModes.default;
-
   document.title = selected.title;
   document.getElementById("tabIcon").href = selected.icon;
 });
 
 
-/* =========================
-   NEON CLICK RIPPLE SYSTEM
-   ========================= */
+/* App icon fallbacks */
 
-const rippleLayer = document.getElementById("rippleLayer");
-
-const sparkColors = [
-  "#ffffff",
-  "#5cf7ff",
-  "#bd73ff",
-  "#ff52d6",
-  "#8b7cff",
-  "#a2fffa"
-];
-
-function createEffect(className, x, y) {
-  const element = document.createElement("span");
-
-  element.className = className;
-  element.style.left = x + "px";
-  element.style.top = y + "px";
-
-  rippleLayer.appendChild(element);
-
-  return element;
-}
-
-function clickBurst(x, y) {
-  // Three expanding neon rings
-  ["ripple", "ripple ring-two", "ripple ring-three"].forEach((name) => {
-    const ring = createEffect(name, x, y);
-
-    ring.addEventListener("animationend", () => ring.remove(), {
-      once: true
-    });
-  });
-
-  // Bright central shockwave
-  const shock = createEffect("shockwave", x, y);
-
-  shock.addEventListener("animationend", () => shock.remove(), {
-    once: true
-  });
-
-  // Quick glowing flash
-  const flash = createEffect("click-flash", x, y);
-
-  flash.addEventListener("animationend", () => flash.remove(), {
-    once: true
-  });
-
-  // Sparks shoot outward in random directions
-  const particleCount = 19;
-
-  for (let i = 0; i < particleCount; i++) {
-    const spark = createEffect("spark", x, y);
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 25 + Math.random() * 95;
-
-    spark.style.setProperty("--dx", Math.cos(angle) * distance + "px");
-    spark.style.setProperty("--dy", Math.sin(angle) * distance + "px");
-
-    spark.style.setProperty(
-      "--spark-color",
-      sparkColors[Math.floor(Math.random() * sparkColors.length)]
-    );
-
-    spark.style.width = (2 + Math.random() * 3) + "px";
-    spark.style.height = spark.style.width;
-
-    spark.addEventListener("animationend", () => spark.remove(), {
-      once: true
-    });
-  }
-}
-
-document.addEventListener("pointerdown", function(event) {
-  // Only react to the main mouse button or touch
-  if (event.pointerType === "mouse" && event.button !== 0) return;
-
-  clickBurst(event.clientX, event.clientY);
+document.querySelectorAll(".app-icon").forEach(function(icon) {
+  icon.addEventListener("error", function() {
+    const fallback = document.createElement("span");
+    fallback.className = "app-icon app-icon-fallback";
+    fallback.style.display = "grid";
+    fallback.style.placeItems = "center";
+    fallback.style.fontSize = "25px";
+    fallback.textContent = icon.dataset.fallback || "🌐";
+    icon.replaceWith(fallback);
+  }, { once: true });
 });
 
 
-/* =========================
-   INTERACTIVE CARD LIGHTING
-   ========================= */
+/* Gentle expanding click ripples */
 
-document.querySelectorAll(".app-card").forEach((card) => {
-  card.addEventListener("pointermove", (event) => {
+const rippleLayer = document.getElementById("rippleLayer");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+document.addEventListener("pointerdown", function(event) {
+  if (reduceMotion.matches) return;
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+
+  const x = event.clientX;
+  const y = event.clientY;
+
+  ["ripple", "ripple secondary"].forEach(function(className) {
+    const ring = document.createElement("span");
+    ring.className = className;
+    ring.style.left = x + "px";
+    ring.style.top = y + "px";
+
+    rippleLayer.appendChild(ring);
+
+    ring.addEventListener("animationend", function() {
+      ring.remove();
+    }, { once: true });
+  });
+});
+
+
+/* Soft lighting follows the pointer on app cards */
+
+document.querySelectorAll(".app-card").forEach(function(card) {
+  card.addEventListener("pointermove", function(event) {
     const rect = card.getBoundingClientRect();
 
     card.style.setProperty("--mx", (event.clientX - rect.left) + "px");
@@ -1340,33 +987,7 @@ document.querySelectorAll(".app-card").forEach((card) => {
 });
 
 
-/* =========================
-   FLOATING NEON PARTICLES
-   ========================= */
-
-const floatingLights = document.getElementById("floatingLights");
-
-for (let i = 0; i < 28; i++) {
-  const light = document.createElement("span");
-
-  light.className = "floating-light";
-  light.style.left = Math.random() * 100 + "vw";
-  light.style.top = (45 + Math.random() * 80) + "vh";
-  light.style.animationDuration = (12 + Math.random() * 24) + "s";
-  light.style.animationDelay = (-Math.random() * 25) + "s";
-
-  if (Math.random() > .5) {
-    light.style.background = "#d7a2ff";
-    light.style.boxShadow = "0 0 9px 2px rgba(192, 110, 255, .55)";
-  }
-
-  floatingLights.appendChild(light);
-}
-
-
-/* =========================
-   SUBTLE KEYBOARD SHORTCUT
-   ========================= */
+/* Slash key focuses search */
 
 document.addEventListener("keydown", function(event) {
   const target = event.target;
